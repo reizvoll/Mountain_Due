@@ -1,8 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Login from '../pages/auth/Login'
 import SignUp from '../pages/auth/SignUp'
-import ProtectedRoute from '../components/pages/Protected/ProtectedRoute'
-import MainLayout from '../components/pages/Protected/MainLayout'
 import Home from '../pages/protected/Home'
 
 const Router = () => {
@@ -12,11 +10,7 @@ const Router = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
 
-        <Route path="/" element={<ProtectedRoute />}>
-          <Route element={<MainLayout />}>
-            <Route index element={<Home />} />
-          </Route>
-        </Route>
+        <Route path="/" element={<Home />} />
       </Routes>
     </BrowserRouter>
   )
