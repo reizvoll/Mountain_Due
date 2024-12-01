@@ -3,6 +3,10 @@ import { useEffect, useRef, useState } from "react";
 const { kakao } = window;
 
 const Map = () => {
+  // 구글 API_KEY , ENGINE_ID
+  const GOOGLE_API_KEY = import.meta.env.VITE_APP_GOOGLE_API_KEY;
+  const SEARCH_ENGINE_ID = import.meta.env.VITE_APP_SEARCH_ENGINE_ID;
+
   // 기본 map DOM 접근
   const mapRef = useRef(null);
   // form DOM 접근
@@ -17,7 +21,6 @@ const Map = () => {
   const [info, setInfo] = useState("");
   // 장소 리스트
   const [places, setPlaces] = useState([]);
-  console.log(map);
   useEffect(() => {
     if (mapRef.current) {
       const options = { center: new kakao.maps.LatLng(33.450701, 126.570667) };
@@ -54,7 +57,7 @@ const Map = () => {
 
   // 검색 목록과 마커를 표출합니다.
   // 좌표를 통해 검색을 해야될 것 같다.
-  const displayPlaces = (places) => {
+  const displayPlaces = async (places) => {
     // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
     // LatLngBounds 객체에 좌표를 추가합니다
     const bounds = new kakao.maps.LatLngBounds();
@@ -88,7 +91,6 @@ const Map = () => {
   const getListItem = (index, places) => {
     setPlaces(places);
   };
-  console.log(places);
   const displayMarkerOnMap = (markers, map, places) => {
     // markers map state 값 받아와서 forEach로 사용
     markers.forEach((marker) => {
@@ -107,8 +109,6 @@ const Map = () => {
       });
     });
   };
-
-  console.log(markers);
 
   return (
     <div
