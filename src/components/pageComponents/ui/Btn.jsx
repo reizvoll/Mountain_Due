@@ -7,7 +7,7 @@ const Btn = ({ onClick, children }) => {
       >
         {children}
       </button>
-    );
-  };
+    )
+  }
   
   export default Btn
