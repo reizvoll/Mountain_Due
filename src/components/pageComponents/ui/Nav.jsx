@@ -22,7 +22,7 @@ const Nav = () => {
 
   if (!isLogin) {
     return (
-      <div className="relative w-[360px] h-[60px] bg-[rgba(137,137,137,0.4)] backdrop-blur-[2px] rounded-[30px] flex items-center justify-around px-5">
+      <div className="relative w-[310px] h-[60px] bg-[rgba(137,137,137,0.4)] backdrop-blur-[2px] rounded-[30px] flex items-center justify-around px-5">
         <div className="flex items-center gap-6">
           <FaHome className="text-white text-[35px]" />
           <FaYoutube className="text-white text-[35px]" />
