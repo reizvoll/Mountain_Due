@@ -16,7 +16,7 @@ const Nav = () => {
 
       <div className="w-[43px] h-[43px] bg-[#D9D9D9] rounded-full"></div>
     </div>
-  );
-};
+  )
+}
 
 export default Nav
