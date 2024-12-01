@@ -1,8 +1,8 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import Login from '../pages/auth/Login'
-import SignUp from '../pages/auth/SignUp'
-import Home from '../pages/un-protected/Home'
-import ProtectedHome from '../pages/protected/ProtectedHome'
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Login from "../pages/auth/Login";
+import SignUp from "../pages/auth/SignUp";
+import Youtube from "../pages/youtube/Youtube";
+import Home from "../pages/Home/Home";
 
 const Router = () => {
   return (
@@ -10,12 +10,11 @@ const Router = () => {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
-
         <Route path="/" element={<Home />} />
-        <Route path="/main" element={<ProtectedHome />} />
+        <Route path="/youtube" element={<Youtube />} />
       </Routes>
     </BrowserRouter>
-  )
-}
+  );
+};
 
-export default Router
+export default Router;
