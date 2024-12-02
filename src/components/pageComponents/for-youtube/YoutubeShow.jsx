@@ -6,7 +6,7 @@ import YoutubeBeginner from "./YoutubeBeginner";
 import YoutubeClimbing from "./YoutubeClimbing";
 import { MOCK_DATA } from "../../../mock-data/climbingData";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { getClimbResults } from "../../../api/youtube/youtube";
+import { getClimbResults } from "../../../api/youtube";
 
 const YoutubeShow = () => {
   const fetchClimbResults = async ({ pageParam = "" }) => {
