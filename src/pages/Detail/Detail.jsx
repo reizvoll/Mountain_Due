@@ -1,5 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { BiSolidComment } from 'react-icons/bi';
+import Btn from '../../components/pageComponents/ui/Btn';
+import { RiDeleteBin6Line } from 'react-icons/ri';
+import { LuPencilLine } from 'react-icons/lu';
 
 const { kakao } = window;
 
@@ -40,18 +44,54 @@ const Detail = () => {
     }, [spotId, spotName]);
 
     return (
-        <div>
-            <h3>상세 페이지</h3>
+        <div className="w-[1200px] flex flex-col gap-4 mx-auto p-10 ">
+            <h3 className="text-3xl text-[#535353] font-bold">상세 페이지</h3>
 
-            <div>
-                <div>
-                    <p>{spotData?.place_name}</p>
-                    <p>{spotData?.category_name}</p>
-                    <p>{spotData?.road_address_name}</p>
-                    <p>(지번) {spotData?.address_name}</p>
-                    <p>{spotData?.phone}</p>
+            {/* 상세 정보 */}
+            <div className="flex justify-between border border-gray-500 rounded-2xl p-10">
+                <div className="flex flex-col justify-between">
+                    <div className="flex flex-col gap-4">
+                        <h3 className="text-3xl text-[#2D2D2D] font-bold">{spotData?.place_name}</h3>
+                        <p className="text-xl text-[#848484] font-bold">{spotData?.category_name}</p>
+                        <p className="text-xl text-[#848484] font-bold">{spotData?.road_address_name}</p>
+                        <p className="text-xl text-[#848484] font-bold">(지번) {spotData?.address_name}</p>
+                        <p className="text-xl text-[#848484] font-bold">{spotData?.phone}</p>
+                    </div>
                 </div>
-                <div ref={mapRef} style={{ width: '500px', height: '400px' }}></div>
+
+                <div className="flex items-end gap-8">
+                    <p className="text-2xl text-black font-bold">
+                        <span className="text-2xl text-red-500 font-bold">♥</span> 5
+                    </p>
+                    <div ref={mapRef} className="w-[480px] h-[320px]" />
+                </div>
+            </div>
+
+            {/* 리뷰 */}
+            <div className="flex flex-col gap-8 pt-10">
+                <div className="flex items-end gap-2">
+                    <BiSolidComment className=" text-2xl text-black" />
+                    <span>1</span>
+                </div>
+                <div className="flex items-center gap-2">
+                    <textarea className="w-full border border-gray-500 rounded-xl resize-none p-2" placeholder="리뷰를 입력해 주세요."></textarea>
+                    <Btn onClick={() => {}}>작성하기</Btn>
+                </div>
+                <div className="flex flex-col gap-8">
+                    <div className="flex flex-col gap-2">
+                        <div className="flex items-center gap-2">
+                            <div className="w-10 h-10 bg-gray-300 rounded-full" />
+                            <p className="text-lg">닉네임</p>
+                        </div>
+                        <div className="flex justify-between items-center border border-gray-300 rounded-xl p-4">
+                            <p className="text-lg">댓글 내용</p>
+                            <div className="flex gap-4">
+                                <LuPencilLine className="text-lg text-black" />
+                                <RiDeleteBin6Line className="text-lg text-black" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );
