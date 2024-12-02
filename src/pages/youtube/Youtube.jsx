@@ -1,14 +1,16 @@
+import ContainerYoutubeSection from "../../components/pageComponents/for-youtube/ContainerYoutubeSection";
 import Hero from "../../components/pageComponents/for-youtube/Hero";
 import YoutubeShow from "../../components/pageComponents/for-youtube/YoutubeShow";
-import Container from "../../components/pageComponents/ui/Container";
 
 const Youtube = () => {
   return (
     <>
+    <div className="items-center justify-center overflow-hidden">
       <Hero />
-      <Container>
+      <ContainerYoutubeSection>
       <YoutubeShow />
-      </Container>
+      </ContainerYoutubeSection>
+      </div>
     </>
   );
 };

@@ -11,7 +11,7 @@ const Hero = () => {
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
         }}
-        className="flex flex-col items-center justify-center min-h-[600px] w-screen mb-[100px]"
+        className="flex flex-col items-center justify-center min-h-[600px] w-screen mb-[50px]"
       >
         <div className="absolute top-[18px] left-0 w-full flex items-center justify-between px-[50px]">
           <div
