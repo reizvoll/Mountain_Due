@@ -13,8 +13,7 @@ export const usePlaces = (placeId) => {
     /* place 추가 */
     const createMutation = useMutation({
         mutationFn: createPlaceAPI,
-        onSuccess: () => queryClient.invalidateQueries(['place']),
-        onError: (e) => console.log('create error => ', e)
+        onSuccess: () => queryClient.invalidateQueries(['place'])
     });
 
     return { place, createMutation };
