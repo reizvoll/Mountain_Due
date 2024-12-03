@@ -41,7 +41,7 @@ const Comments = () => {
             </form>
             <div className="flex flex-col gap-8">
                 {comments?.map((comment) => (
-                    <div className="flex flex-col gap-2">
+                    <div key={comment.id} className="flex flex-col gap-2">
                         <div className="flex items-center gap-2">
                             <div className="w-10 h-10 bg-gray-300 rounded-full" />
                             <p className="text-lg">{comment.user.nickname}</p>
