@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import Pagination from "../../components/pageComponents/for-map/Pagination";
 
 const Map = () => {
   const navigate = useNavigate();
@@ -9,6 +9,7 @@ const Map = () => {
   const [markers, setMarkers] = useState([]);
   const [mapList, setMapList] = useState([]);
   const [pagination, setPagination] = useState(null);
+  const [selectedPage, setSelectedPage] = useState(1);
   const ps = new kakao.maps.services.Places();
 
   // 마커 이미지 설정
@@ -60,7 +61,7 @@ const Map = () => {
         count: 15,
       }
     );
-  };
+  };g
 
   const placeSearchCB = (data, status, kakaoMap, pagination) => {
     if (status === kakao.maps.services.Status.OK) {
@@ -121,26 +122,23 @@ const Map = () => {
 
   const cities = ["서울", "인천", "대전", "대구", "광주", "부산"];
   const handleCityClick = (e) => {
+    setSelectedPage(1);
     removeMarkers(); // 기존 마커 제거
     const city = e.target.value;
-    ps.keywordSearch(`${city} 클라이밍`, (data, status) =>
-      placeSearchCB(data, status, map)
+    ps.keywordSearch(`${city} 클라이밍`, (data, status, pagination) =>
+      placeSearchCB(data, status, map, pagination)
     );
-  };
-
-  const displayPagination = (page) => {
-    if (pagination && pagination.gotoPage) {
-      pagination.gotoPage(page);
-    }
   };
 
   return (
     <>
       <div className={"flex justify-between items-end"}>
         <h2 className={"text-black w-full"}>
-          주변 클라이밍장<span>도심 속 클라이밍장을 찾아보세요</span>
+          <div>
+            주변 클라이밍장<span>도심 속 클라이밍장을 찾아보세요</span>
+          </div>
         </h2>
-        <div className={"flex gap-4"}>
+        <div className={"flex gap-4 w-full"}>
           {cities.map((city) => (
             <button
               className={"w-20 h-6 bg-[#FFB200] text-white rounded-3xl"}
@@ -176,7 +174,12 @@ const Map = () => {
             ))}
           </ul>
           {/* 페이지네이션 */}
-          {pagination && (
+          <Pagination
+            pagination={pagination}
+            selectedPage={selectedPage}
+            setSelectedPage={setSelectedPage}
+          ></Pagination>
+          {/* {pagination && (
             <div style={{ marginTop: "20px" }}>
               {Array.from({ length: pagination.last }, (_, i) => (
                 <button
@@ -190,7 +193,7 @@ const Map = () => {
                 </button>
               ))}
             </div>
-          )}
+          )} */}
         </div>
       </div>
     </>
