@@ -17,6 +17,13 @@ export const createCommentAPI = async (data) => {
     });
 };
 
+/* comment 수정 */
+export const updateCommentAPI = async (data) => {
+    const { commentId, content } = data;
+
+    await supabase.from('comments').update({ content }).eq('id', commentId);
+};
+
 /* comment 삭제 */
 export const deleteCommentAPI = async (commentId) => {
     await supabase.from('comments').delete().eq('id', commentId);
