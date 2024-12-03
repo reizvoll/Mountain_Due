@@ -1,9 +1,25 @@
 import { supabase } from "./supabaseClient";
 
 export const loginUser = async (email, password) => {
-  const { error } = await supabase.auth.signInWithPassword({
+  const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
-  return { error };
+
+  if (error) {
+    return { error };
+  }
+
+  // user 정보 가져오기
+  const { data: userDetails, error: userError } = await supabase
+    .from("users")
+    .select("id, nickname, img_url")
+    .eq("id", data.user.id)
+    .single();
+
+  if (userError) {
+    return { error: userError };
+  }
+
+  return { user: userDetails, error: null };
 };
