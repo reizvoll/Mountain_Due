@@ -78,6 +78,7 @@ const Map = () => {
     const newMarkers = places.map((place) => {
       bounds.extend(new kakao.maps.LatLng(place.y, place.x));
       return {
+        id: place.id,
         position: {
           lat: place.y,
           lng: place.x,
@@ -92,10 +93,11 @@ const Map = () => {
     // 초기 검색 후에만 지도의 범위를 설정
     kakaoMap.setBounds(bounds);
   };
-
-  const displayMarkerOnMap = (markers, kakaoMap) => {
+  const displayMarkerOnMap = (markers, kakaoMap, places) => {
+    console.log(markers);
     // 기존 마커 제거
     markers.forEach((marker) => {
+      console.log(marker);
       const kakaoMarker = new kakao.maps.Marker({
         position: new kakao.maps.LatLng(
           marker.position.lat,
@@ -108,7 +110,7 @@ const Map = () => {
       kakao.maps.event.addListener(kakaoMarker, "click", () => {
         const result = window.confirm(`${marker.content}로 이동하시겠습니까?`);
         if (result) {
-          navigate(`/${marker.id}/${marker.place_name}`);
+          navigate(`/${marker.id}/${marker.content}`);
         }
       });
     });
@@ -117,7 +119,7 @@ const Map = () => {
   // markers, map이 바뀌면 map이 존재할 때 마커를 지워주는 역할
   useEffect(() => {
     if (map) {
-      displayMarkerOnMap(markers, map);
+      displayMarkerOnMap(markers, map, places);
     }
   }, [markers, map]);
 
