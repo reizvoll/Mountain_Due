@@ -1,4 +1,5 @@
 import Container from "../ui/Container";
+import Nav from "../ui/Nav";
 
 const Hero = () => {
   return (
@@ -10,8 +11,15 @@ const Hero = () => {
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
         }}
-        className="flex flex-col items-center justify-center min-h-[600px] w-screen mb-[100px]"
+        className="flex flex-col items-center justify-center min-h-[600px] w-screen mb-[50px]"
       >
+        <div className="absolute top-[18px] left-0 w-full flex items-center justify-between px-[50px]">
+          <div
+            className="w-[115px] h-[115px] bg-cover"
+            style={{ backgroundImage: "url('/img/mountain_due.png')" }}
+          ></div>
+          <Nav />
+        </div>
         <div className="flex flex-col items-center gap-16">
           <h2 className="text-[48px]">Youtube 영상</h2>
           <div className="flex flex-col items-center">
