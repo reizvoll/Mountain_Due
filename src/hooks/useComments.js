@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { createCommentAPI, fetchCommentsAPI } from '../api/comment';
+import { createCommentAPI, deleteCommentAPI, fetchCommentsAPI } from '../api/comment';
 
 export const useComments = (placeId) => {
     const queryClient = useQueryClient();
@@ -16,5 +16,11 @@ export const useComments = (placeId) => {
         onSuccess: () => queryClient.invalidateQueries(['comments'])
     });
 
-    return { comments, createMutation };
+    /* comment 삭제 */
+    const deleteMutation = useMutation({
+        mutationFn: deleteCommentAPI,
+        onSuccess: () => queryClient.invalidateQueries(['comments'])
+    });
+
+    return { comments, createMutation, deleteMutation };
 };

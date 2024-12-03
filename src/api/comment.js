@@ -16,3 +16,8 @@ export const createCommentAPI = async (data) => {
         place_id: placeId
     });
 };
+
+/* comment 삭제 */
+export const deleteCommentAPI = async (commentId) => {
+    await supabase.from('comments').delete().eq('id', commentId);
+};
