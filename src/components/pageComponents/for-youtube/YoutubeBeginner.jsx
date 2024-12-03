@@ -4,6 +4,7 @@ const YoutubeBeginner = ({
   beginnerResult,
   fetchNextBeginner,
   modalClickHandler,
+  beginnerHasNextPage,
 }) => {
   if (beginnerResult) {
     return (
@@ -34,13 +35,15 @@ const YoutubeBeginner = ({
               });
             })}
           </div>
-          <Btn
-            onClick={() => {
-              fetchNextBeginner();
-            }}
-          >
-            더 보기
-          </Btn>
+          {beginnerHasNextPage && (
+            <Btn
+              onClick={() => {
+                fetchNextBeginner();
+              }}
+            >
+              더 보기
+            </Btn>
+          )}
         </div>
       </>
     );
