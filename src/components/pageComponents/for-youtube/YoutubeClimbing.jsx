@@ -4,6 +4,7 @@ const YoutubeClimbing = ({
   climbResult,
   modalClickHandler,
   fetchNextClimb,
+  hasNextPage,
 }) => {
   if (climbResult) {
     return (
@@ -20,27 +21,29 @@ const YoutubeClimbing = ({
                 return (
                   <div key={item.id}>
                     <img
-                      width="300"
-                      height="180"
+                      className="w-[300px] h-[165px] object-cover rounded-md hover:cursor-pointer"
                       src={item.thumbnail}
-                      className="rounded-md"
                       onClick={() => {
                         modalClickHandler(item);
                       }}
                     ></img>
-                    <p className="mt-3 text-[18px]">{item.title.substring(0, 15).trim()+"..."}</p>
+                    <p className="mt-3 text-[18px]">
+                      {item.title.substring(0, 17).trim() + "..."}
+                    </p>
                   </div>
                 );
               });
             })}
           </div>
-          <Btn
-            onClick={() => {
-              fetchNextClimb();
-            }}
-          >
-            더 보기
-          </Btn>
+          {hasNextPage && (
+            <Btn
+              onClick={() => {
+                fetchNextClimb();
+              }}
+            >
+              더 보기
+            </Btn>
+          )}
         </div>
       </>
     );

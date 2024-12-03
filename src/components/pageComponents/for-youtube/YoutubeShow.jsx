@@ -1,59 +1,22 @@
-// import { useQuery } from "@tanstack/react-query";
-// import Btn from "../ui/Btn";
-// import { getBeginnerResults, getClimbResults } from "../../../api/youtube";
-import { useState } from "react";
 import YoutubeBeginner from "./YoutubeBeginner";
 import YoutubeClimbing from "./YoutubeClimbing";
-import { MOCK_DATA } from "../../../mock-data/climbingData";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { getClimbResults } from "../../../api/youtube";
+import useFetchClimbResults from "../../../hooks/useFetchClimbResults";
+import useFetchBeginnerResults from "../../../hooks/useFetchBeginnerResults";
+import useModalHandler from "../../../hooks/useModalHandler";
 
 const YoutubeShow = () => {
-  const fetchClimbResults = async ({ pageParam = "" }) => {
-    const data = await getClimbResults(pageParam);
-    return {
-      items: data.items,
-      nextPageToken: data.nextPageToken,
-    };
-  };
+  const { climbResult, fetchNextClimb, hasNextPage, isFetchingNextPage } =
+    useFetchClimbResults();
 
   const {
-    data: climbResult,
-    fetchNextPage : fetchNextClimb,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useInfiniteQuery({
-    queryKey: ["climbResults"],
-    queryFn: fetchClimbResults,
-    getNextPageParam: (lastPage) => lastPage.nextPageToken || undefined,
-    select: (data) => {
-      return data.pages.map((page) => ({
-        items: page.items.map((item) => ({
-          id: item.id.videoId,
-          title: item.snippet.title,
-          thumbnail: item.snippet.thumbnails.high.url,
-        })),
-        nextPageToken: page.nextPageToken,
-      }));
-    },
-  });
+    beginnerHasNextPage,
+    beginnerResult,
+    beginnerisFetchingNextPage,
+    fetchNextBeginner,
+  } = useFetchBeginnerResults();
 
-  const [isClicked, setIsClicked] = useState(false);
-  const [youtubeId, setYoutubeId] = useState("");
-
-  const modalClickHandler = (item) => {
-    const toggle = !isClicked;
-    setIsClicked(toggle);
-    const {
-      id: { videoId },
-    } = item;
-    setYoutubeId(videoId);
-  };
-
-  const modalClose = (e) => {
-    e.stopPropagation();
-    setIsClicked(false);
-  };
+  const { isClicked, youtubeId, modalClickHandler, modalClose } =
+    useModalHandler();
 
   return (
     <>
@@ -63,10 +26,13 @@ const YoutubeShow = () => {
             climbResult={climbResult}
             modalClickHandler={modalClickHandler}
             fetchNextClimb={fetchNextClimb}
+            hasNextPage={hasNextPage}
           />
           <YoutubeBeginner
-            MOCK_DATA={MOCK_DATA}
+            beginnerResult={beginnerResult}
             modalClickHandler={modalClickHandler}
+            fetchNextBeginner={fetchNextBeginner}
+            beginnerHasNextPage={beginnerHasNextPage}
           />
         </div>
       </main>
