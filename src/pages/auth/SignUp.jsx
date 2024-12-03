@@ -23,7 +23,7 @@ const SignUp = () => {
     setValue,
     setError,
     clearErrors,
-
+    trigger,
     formState: { errors, isValid },
   } = useForm({
     mode: "onChange", // 입력값이 변경될 때마다 유효성 검사
@@ -126,6 +126,7 @@ const SignUp = () => {
             errors={errors}
             watch={watch}
             setValue={setValue}
+            trigger={trigger}
           />
           <button
             type="submit"
