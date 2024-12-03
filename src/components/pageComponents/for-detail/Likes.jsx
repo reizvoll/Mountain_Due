@@ -13,7 +13,7 @@ const Likes = () => {
     };
 
     return (
-        <p className="text-2xl text-black font-bold cursor-pointer" onClick={handleToggle}>
+        <p className="text-2xl font-bold cursor-pointer" onClick={handleToggle}>
             <span className="text-2xl text-red-500 font-bold">{likes?.isLiked ? '♥' : '♡'}</span> {likes?.count}
         </p>
     );
