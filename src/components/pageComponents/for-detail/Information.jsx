@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Likes from './Likes';
+import { usePlaces } from '../../../hooks/usePlaces';
 
 const { kakao } = window;
 
 const Information = () => {
     const { id: spotId, name: spotName } = useParams();
+    const { place, createMutation } = usePlaces(spotId);
 
     const mapRef = useRef(null);
 
@@ -36,6 +38,11 @@ const Information = () => {
 
                 // 검색 결과를 기준으로 지도 범위 재설정
                 map.setBounds(bounds);
+
+                // DB에 데이터가 존재하지 않으면 추가
+                if (!place) {
+                    createMutation.mutate(matchData);
+                }
             }
         });
     }, [spotId, spotName]);
