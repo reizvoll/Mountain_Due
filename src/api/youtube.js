@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_KEY = "AIzaSyBs9ASH5if90rwwByEHmWebTY_ykq0Ap5A";
+const API_KEY = "AIzaSyC0NeCVkjuKSGZiKLC92ppNvbMSBTUxBoA";
 
 const youtubeAPI = axios.create({
   baseURL: "https://youtube.googleapis.com/youtube/v3",
@@ -13,25 +13,23 @@ const youtubeAPI = axios.create({
 const paramsClimbing = {
   part: "snippet",
   maxResults: 6,
-  order: "relevance",
-  q: "클라이밍",
+  playlistId: "PLQw_lIekogqOZpOzmzpMzfDjksS9FQxPv",
   key: API_KEY,
 };
 
 const paramsBeginner = {
   part: "snippet",
   maxResults: 6,
-  order: "relevance",
-  q: "초보 클라이밍",
+  playlistId: "PLQw_lIekogqPuD9j-r-XSWnHUwJGzjMhH",
   key: API_KEY,
 };
 
 export const getClimbResults = async (pageToken = "") => {
   try {
-    const response = await youtubeAPI.get("/search", {
+    const response = await youtubeAPI.get("/playlistItems", {
       params: {
         ...paramsClimbing,
-        pageToken, 
+        pageToken,
       },
     });
     console.log("YouTube API response:", response);
@@ -42,8 +40,18 @@ export const getClimbResults = async (pageToken = "") => {
   }
 };
 
-export const getBeginnerResults = async () => {
-  const response = await youtubeAPI.get("/search", { params: paramsBeginner });
-  console.log(response);
-  return response.data;
+export const getBeginnerResults = async (pageToken = "") => {
+  try {
+    const response = await youtubeAPI.get("/playlistItems", {
+      params: {
+        ...paramsBeginner,
+        pageToken,
+      },
+    });
+    console.log("YouTube API response:", response);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching climb results:", error);
+    throw error;
+  }
 };
