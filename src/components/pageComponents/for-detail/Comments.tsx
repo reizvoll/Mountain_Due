@@ -14,7 +14,11 @@ const Comments = () => {
     const { comments, createMutation, updateMutation, deleteMutation } = useComments(spotId);
     const { user } = useUser();
 
-    const { values: createValues, handleChange: handleCreateChange } = useForm({
+    const {
+        values: createValues,
+        handleChange: handleCreateChange,
+        handleReset: handleCreateReset
+    } = useForm({
         content: ''
     });
 
@@ -22,7 +26,7 @@ const Comments = () => {
         values: updateValues,
         handleChange: handleUpdateChange,
         handleMultiple,
-        handleReset
+        handleReset: handleUpdateReset
     } = useForm({
         id: '',
         content: ''
@@ -32,6 +36,7 @@ const Comments = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         createMutation.mutate({ userId: user.id, placeId: spotId, ...createValues });
+        handleCreateReset();
     };
 
     /* 리뷰 수정 모드로 변경 */
@@ -45,7 +50,7 @@ const Comments = () => {
     /* 리뷰 수정 */
     const handleUpdate = (commentId) => {
         updateMutation.mutate({ commentId, content: updateValues.content });
-        handleReset();
+        handleUpdateReset();
     };
 
     /* 리뷰 삭제 */
@@ -56,14 +61,14 @@ const Comments = () => {
     };
 
     return (
-        <div className="flex flex-col gap-8 pt-10">
+        <div className="flex flex-col gap-4 pt-10">
             <div className="flex items-end gap-2">
-                <BiSolidComment className=" text-2xl text-black" />
-                <span>1</span>
+                <BiSolidComment className="text-xl" />
+                <p className="text-xl font-bold">{comments?.length}</p>
             </div>
             <form className="flex items-center gap-2" onSubmit={handleSubmit}>
                 <textarea
-                    className="w-full border border-gray-500 rounded-xl resize-none p-2"
+                    className="w-full border border-gray-500 rounded-2xl resize-none p-4"
                     name="content"
                     placeholder="리뷰를 입력해 주세요."
                     value={createValues.content}
@@ -71,25 +76,25 @@ const Comments = () => {
                 ></textarea>
                 <Btn onClick={() => {}}>작성하기</Btn>
             </form>
-            <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-4">
                 {comments?.map((comment) => (
-                    <div key={comment.id} className="flex flex-col gap-2">
+                    <div key={comment.id} className="flex flex-col gap-2 border border-gray-300 rounded-2xl p-4">
                         <div className="flex items-center gap-2">
-                            <div className="w-10 h-10 bg-gray-300 rounded-full" />
-                            <p className="text-lg">{comment.user.nickname}</p>
+                            <div className="w-8 h-8 bg-gray-300 rounded-full" />
+                            <p className="text-base font-bold">{comment.user.nickname}</p>
                         </div>
                         {updateValues.id === comment.id ? (
-                            <form className="flex items-center gap-4" onSubmit={handleSubmit}>
-                                <textarea className="w-full border border-gray-500 rounded-xl resize-none p-2" name="content" value={updateValues.content} onChange={handleUpdateChange}></textarea>
-                                <FaCheck className="text-lg text-black cursor-pointer" onClick={() => handleUpdate(comment.id)} />
+                            <form className="flex items-center" onSubmit={handleSubmit}>
+                                <textarea className="w-full border border-gray-500 rounded-2xl resize-none ml-8 mr-4 p-4" name="content" value={updateValues.content} onChange={handleUpdateChange}></textarea>
+                                <FaCheck className="text-xl cursor-pointer" onClick={() => handleUpdate(comment.id)} />
                             </form>
                         ) : (
-                            <div className="flex justify-between items-center border border-gray-300 rounded-xl p-4">
-                                <p className="text-lg">{comment.content}</p>
+                            <div className="flex justify-between items-center">
+                                <p className="text-base px-8 whitespace-pre-wrap">{comment.content}</p>
                                 {user?.id === comment.user.id && (
                                     <div className="flex gap-4">
-                                        <LuPencilLine className="text-lg text-black cursor-pointer" onClick={() => handleChangeMode({ id: comment.id, content: comment.content })} />
-                                        <RiDeleteBin6Line className="text-lg text-black cursor-pointer" onClick={() => handleDelete(comment.id)} />
+                                        <LuPencilLine className="text-xl cursor-pointer" onClick={() => handleChangeMode({ id: comment.id, content: comment.content })} />
+                                        <RiDeleteBin6Line className="text-xl cursor-pointer" onClick={() => handleDelete(comment.id)} />
                                     </div>
                                 )}
                             </div>
