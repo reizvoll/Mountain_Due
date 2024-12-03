@@ -9,6 +9,17 @@ const useForm = (initialValues) => {
     /* 선택 값 변경 */
     const handleSelect = ({ name, selected }) => setValues({ ...values, [name]: selected });
 
+    /* 선택 값 여러 개 변경 */
+    const handleMultiple = (datas) => {
+        const obj = {};
+
+        for (let { name, selected } of datas) {
+            obj[name] = selected;
+        }
+
+        setValues({ ...values, ...obj });
+    };
+
     /* 값 초기화 */
     const handleReset = () => setValues(initialValues);
 
@@ -16,6 +27,7 @@ const useForm = (initialValues) => {
         values,
         handleChange,
         handleSelect,
+        handleMultiple,
         handleReset
     };
 };
