@@ -91,11 +91,13 @@ const YoutubeShow = () => {
             climbResult={climbResult}
             modalClickHandler={modalClickHandler}
             fetchNextClimb={fetchNextClimb}
+            hasNextPage={hasNextPage}
           />
           <YoutubeBeginner
             beginnerResult={beginnerResult}
             modalClickHandler={modalClickHandler}
             fetchNextBeginner={fetchNextBeginner}
+            beginnerHasNextPage={beginnerHasNextPage}
           />
         </div>
       </main>

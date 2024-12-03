@@ -4,6 +4,7 @@ const YoutubeClimbing = ({
   climbResult,
   modalClickHandler,
   fetchNextClimb,
+  hasNextPage,
 }) => {
   if (climbResult) {
     return (
@@ -34,13 +35,15 @@ const YoutubeClimbing = ({
               });
             })}
           </div>
-          <Btn
-            onClick={() => {
-              fetchNextClimb();
-            }}
-          >
-            더 보기
-          </Btn>
+          {hasNextPage && (
+            <Btn
+              onClick={() => {
+                fetchNextClimb();
+              }}
+            >
+              더 보기
+            </Btn>
+          )}
         </div>
       </>
     );
