@@ -78,6 +78,7 @@ const Map = () => {
     const newMarkers = places.map((place) => {
       bounds.extend(new kakao.maps.LatLng(place.y, place.x));
       return {
+        id: place.id,
         position: {
           lat: place.y,
           lng: place.x,
@@ -108,7 +109,7 @@ const Map = () => {
       kakao.maps.event.addListener(kakaoMarker, "click", () => {
         const result = window.confirm(`${marker.content}로 이동하시겠습니까?`);
         if (result) {
-          navigate(`/${marker.id}/${marker.place_name}`);
+          navigate(`/${marker.id}/${marker.content}`);
         }
       });
     });
