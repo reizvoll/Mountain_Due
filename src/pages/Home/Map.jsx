@@ -1,16 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const { kakao } = window;
 
 const Map = () => {
   const navigate = useNavigate();
   const mapRef = useRef(null);
   const [map, setMap] = useState(null);
   const [markers, setMarkers] = useState([]);
-  const [places, setPlaces] = useState([]);
+  const [mapList, setMapList] = useState([]);
+  const [pagination, setPagination] = useState(null);
   const ps = new kakao.maps.services.Places();
-  // 마커 이미지 변경하는 변수
+
+  // 마커 이미지 설정
   const markerImage = new kakao.maps.MarkerImage(
     "/img/mountain_due.png",
     new kakao.maps.Size(64, 69),
@@ -26,7 +27,6 @@ const Map = () => {
         const kakaoMap = new kakao.maps.Map(mapRef.current, options);
 
         setMap(kakaoMap);
-        // initializeMap에 포함시켜서 함께 업데이트 시키기
         searchNearbyPlaces(lat, lng, kakaoMap);
       };
 
@@ -52,7 +52,8 @@ const Map = () => {
 
     ps.keywordSearch(
       "클라이밍",
-      (data, status) => placeSearchCB(data, status, kakaoMap),
+      (data, status, pagination) =>
+        placeSearchCB(data, status, kakaoMap, pagination),
       {
         location,
         radius,
@@ -61,11 +62,14 @@ const Map = () => {
     );
   };
 
-  // 장소기반 검색
-  const placeSearchCB = (data, status, kakaoMap) => {
-    // status.ok 이면 마커 생성
+  const placeSearchCB = (data, status, kakaoMap, pagination) => {
     if (status === kakao.maps.services.Status.OK) {
       displayPlaces(data, kakaoMap);
+      if (pagination) {
+        setPagination(pagination);
+      } else {
+        console.log("Pagination data is undefined.");
+      }
     } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
       alert("검색 결과가 없습니다.");
     } else if (status === kakao.maps.services.Status.ERROR) {
@@ -75,64 +79,121 @@ const Map = () => {
 
   const displayPlaces = (places, kakaoMap) => {
     const bounds = new kakao.maps.LatLngBounds();
-    const newMarkers = places.map((place) => {
+    const newMarkers = [];
+    setMapList(places);
+    places.forEach((place) => {
       bounds.extend(new kakao.maps.LatLng(place.y, place.x));
-      return {
-        id: place.id,
-        position: {
-          lat: place.y,
-          lng: place.x,
-        },
-        content: place.place_name,
-      };
+      const existingMarker = markers.find((marker) =>
+        marker.getPosition().equals(new kakao.maps.LatLng(place.y, place.x))
+      );
+      if (existingMarker) {
+        // 이미 존재하는 마커는 이동만 시킴
+        existingMarker.setMap(kakaoMap);
+      } else {
+        const kakaoMarker = new kakao.maps.Marker({
+          position: new kakao.maps.LatLng(place.y, place.x),
+          map: kakaoMap,
+          image: markerImage,
+        });
+
+        kakao.maps.event.addListener(kakaoMarker, "click", () => {
+          const result = window.confirm(
+            `${place.place_name}로 이동하시겠습니까?`
+          );
+          if (result) {
+            navigate(`/${place.id}/${place.place_name}`);
+          }
+        });
+
+        newMarkers.push(kakaoMarker);
+      }
     });
 
-    setMarkers(newMarkers);
-    setPlaces(places);
-
-    // 초기 검색 후에만 지도의 범위를 설정
+    setMarkers((prevMarkers) => [...prevMarkers, ...newMarkers]); // 마커 상태 업데이트
     kakaoMap.setBounds(bounds);
   };
-  const displayMarkerOnMap = (markers, kakaoMap, places) => {
-    console.log(markers);
-    // 기존 마커 제거
+  const removeMarkers = () => {
     markers.forEach((marker) => {
-      console.log(marker);
-      const kakaoMarker = new kakao.maps.Marker({
-        position: new kakao.maps.LatLng(
-          marker.position.lat,
-          marker.position.lng
-        ),
-        map: kakaoMap,
-        image: markerImage,
-      });
-
-      kakao.maps.event.addListener(kakaoMarker, "click", () => {
-        const result = window.confirm(`${marker.content}로 이동하시겠습니까?`);
-        if (result) {
-          navigate(`/${marker.id}/${marker.content}`);
-        }
-      });
+      marker.setMap(null);
     });
+    setMarkers([]); // 마커 배열 초기화
   };
 
-  // markers, map이 바뀌면 map이 존재할 때 마커를 지워주는 역할
-  useEffect(() => {
-    if (map) {
-      displayMarkerOnMap(markers, map, places);
+  const cities = ["서울", "인천", "대전", "대구", "광주", "부산"];
+  const handleCityClick = (e) => {
+    removeMarkers(); // 기존 마커 제거
+    const city = e.target.value;
+    ps.keywordSearch(`${city} 클라이밍`, (data, status) =>
+      placeSearchCB(data, status, map)
+    );
+  };
+
+  const displayPagination = (page) => {
+    if (pagination && pagination.gotoPage) {
+      pagination.gotoPage(page);
     }
-  }, [markers, map]);
+  };
 
   return (
-    <div style={{ width: "100%", display: "inline-block" }}>
-      <div ref={mapRef} style={{ width: "99%", height: "500px" }}></div>
-
-      {/* 리스트 확인 <ul>
-        {places.map((place, index) => (
-          <li key={index}>{place.place_name}</li>
-        ))}
-      </ul> */}
-    </div>
+    <>
+      <div className={"flex justify-between items-end"}>
+        <h2 className={"text-black w-full"}>
+          주변 클라이밍장<span>도심 속 클라이밍장을 찾아보세요</span>
+        </h2>
+        <div className={"flex gap-4"}>
+          {cities.map((city) => (
+            <button
+              className={"w-20 h-6 bg-[#FFB200] text-white rounded-3xl"}
+              key={city}
+              value={city}
+              onClick={handleCityClick}
+            >
+              {city}
+            </button>
+          ))}
+        </div>
+      </div>
+      <div style={{ width: "100%", display: "inline-block" }}>
+        <div ref={mapRef} style={{ width: "99%", height: "500px" }}></div>
+      </div>
+      <div className="flex">
+        <div
+          style={{
+            width: "30%",
+            padding: "10px",
+            borderRight: "1px solid #ddd",
+          }}
+        >
+          <h3>검색 결과</h3>
+          <ul>
+            {mapList.map((place, index) => (
+              <li key={index} style={{ marginBottom: "10px" }}>
+                <p>{index}</p>
+                <strong>{place.place_name}</strong>
+                <br />
+                <span>{place.address_name}</span>
+              </li>
+            ))}
+          </ul>
+          {/* 페이지네이션 */}
+          {pagination && (
+            <div style={{ marginTop: "20px" }}>
+              {Array.from({ length: pagination.last }, (_, i) => (
+                <button
+                  key={i}
+                  onClick={() => {
+                    displayPagination(i + 1);
+                  }}
+                  style={{ margin: "0 5px" }}
+                >
+                  {i + 1}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </>
   );
 };
 
