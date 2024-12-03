@@ -1,61 +1,52 @@
-import { useState } from "react";
-import { signUpUser, uploadProfileImage, saveUserInfo } from "../../api/signup";
-import { Link, useNavigate } from "react-router-dom";
-
+import React from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate, Link } from "react-router-dom";
 import { IoIosArrowDropleft } from "react-icons/io";
-import useToastAlert from "../../hooks/useToastAlert";
 import { ToastContainer } from "react-toastify";
+import useToastAlert from "../../hooks/useToastAlert";
+import { signUpUser, uploadProfileImage, saveUserInfo } from "../../api/signup";
 import "react-toastify/dist/ReactToastify.css";
 
-import Background from "../../components/pageComponents/for-auth/Background";
+import ProfileImageUploader from "../../components/pageComponents/for-auth/ProfileImageUploader";
 import EmailInput from "../../components/pageComponents/for-auth/EmailInput";
 import PasswordInput from "../../components/pageComponents/for-auth/PasswordInput";
 import NicknameInput from "../../components/pageComponents/for-auth/NicknameInput";
-import ProfileImageUploader from "../../components/pageComponents/for-auth/ProfileImageUploader";
+import Background from "../../components/pageComponents/for-auth/Background";
 
 const SignUp = () => {
-  const [emailPrefix, setEmailPrefix] = useState("");
-  const [emailDomain, setEmailDomain] = useState("custom");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [nickname, setNickname] = useState("");
-  const [image, setImage] = useState(null);
-
   const navigate = useNavigate();
   const showToast = useToastAlert();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    setError,
+    clearErrors,
+    trigger,
+    formState: { errors, isValid },
+  } = useForm({
+    mode: "onChange", // 입력값이 변경될 때마다 유효성 검사
+    defaultValues: {
+      emailDomain: "custom", // emailDomain 초기값 설정
+      nicknameAvailable: false, // 닉네임 중복 확인 상태 초기화
+    },
+  });
 
-  const handleGoHome = () => {
-    navigate("/");
-  };
+  const handleGoHome = () => navigate("/");
 
-  const handleSignUp = async (e) => {
-    e.preventDefault();
-
-    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,20}$/;
-
-    if (!passwordRegex.test(password)) {
-      showToast(
-        "비밀번호는 6~20자리이며 영문과 숫자를 포함해야 합니다.",
-        "error"
-      );
-      return;
-    }
-    if (confirmPassword !== password) {
-      showToast("비밀번호가 일치하지 않습니다.", "error");
-      return;
-    }
+  const onSubmit = async (data) => {
+    const { emailPrefix, emailDomain, password, nickname, image } = data;
 
     const fullEmail =
-      emailDomain === "custom"
-        ? `${emailPrefix}`
-        : `${emailPrefix}@${emailDomain}`;
+      emailDomain === "custom" ? emailPrefix : `${emailPrefix}@${emailDomain}`;
 
     let imageUrl = "/img/default_profile.png";
 
     // 프로필 이미지 업로드
-    if (image) {
+    if (image?.[0]) {
       const { data: uploadData, error: uploadError } = await uploadProfileImage(
-        image
+        image[0]
       );
       if (uploadError) {
         showToast(uploadError.message, "error");
@@ -70,11 +61,13 @@ const SignUp = () => {
       password,
     });
 
+    // 이메일 중복 확인
     if (signUpError) {
-      const errorMessage = signUpError.message.includes("already registered")
-        ? "이미 가입된 이메일입니다."
-        : signUpError.message;
-      showToast(errorMessage, "error");
+      if (signUpError.message.includes("already registered")) {
+        showToast("이미 가입된 이메일입니다.", "error");
+      } else {
+        showToast(signUpError.message, "error");
+      }
       return;
     }
 
@@ -101,7 +94,7 @@ const SignUp = () => {
           className="absolute left-4 top-4 text-3xl cursor-pointer"
           onClick={handleGoHome}
         />
-        <div className="flex items-center mb-6  flex-col gap-2">
+        <div className="flex items-center mb-6 flex-col gap-2">
           <h1 className="text-center flex-grow text-2xl font-bold text-black">
             회원가입
           </h1>
@@ -110,26 +103,35 @@ const SignUp = () => {
           </h2>
         </div>
         <form
-          onSubmit={handleSignUp}
+          onSubmit={handleSubmit(onSubmit)}
           className="gap-5 flex flex-col justify-center items-center"
         >
-          <ProfileImageUploader image={image} setImage={setImage} />
+          <ProfileImageUploader setImage={(file) => setValue("image", file)} />
           <EmailInput
-            emailPrefix={emailPrefix}
-            setEmailPrefix={setEmailPrefix}
-            emailDomain={emailDomain}
-            setEmailDomain={setEmailDomain}
+            register={register}
+            setValue={setValue}
+            watch={watch}
+            errors={errors}
           />
           <PasswordInput
-            password={password}
-            setPassword={setPassword}
-            confirmPassword={confirmPassword}
-            setConfirmPassword={setConfirmPassword}
+            register={register}
+            watch={watch}
+            errors={errors}
+            isSignup={true}
           />
-          <NicknameInput nickname={nickname} setNickname={setNickname} />
+          <NicknameInput
+            register={register}
+            setError={setError}
+            clearErrors={clearErrors}
+            errors={errors}
+            watch={watch}
+            setValue={setValue}
+            trigger={trigger}
+          />
           <button
             type="submit"
-            className="w-1/2 bg-[#FFB200] text-white py-3 font-semibold rounded-full hover:bg-yellow-600 transition mt-8"
+            className="w-1/2 bg-[#FFB200] text-white py-3 font-semibold rounded-full hover:bg-yellow-600 transition mt-8  disabled:opacity-60 disabled:cursor-not-allowed disabled:grayscale"
+            disabled={!isValid} // 모든 유효성 검사 충족 시 활성화
           >
             회원가입
           </button>
@@ -143,8 +145,8 @@ const SignUp = () => {
             </Link>
           </p>
         </form>
+        <ToastContainer />
       </div>
-      <ToastContainer />
     </Background>
   );
 };
