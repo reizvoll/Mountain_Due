@@ -1,144 +1,134 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const { kakao } = window;
 
 const Map = () => {
-  // 구글 API_KEY , ENGINE_ID
-  const GOOGLE_API_KEY = import.meta.env.VITE_APP_GOOGLE_API_KEY;
-  const SEARCH_ENGINE_ID = import.meta.env.VITE_APP_SEARCH_ENGINE_ID;
-
-  // 기본 map DOM 접근
+  const navigate = useNavigate();
   const mapRef = useRef(null);
-  // form DOM 접근
-  const formRef = useRef(null);
-  // 기본 map 세팅
   const [map, setMap] = useState(null);
-  // value 값
-  const [value, setValue] = useState("");
-  // 마커
   const [markers, setMarkers] = useState([]);
-  // info 마커스
-  const [info, setInfo] = useState("");
-  // 장소 리스트
   const [places, setPlaces] = useState([]);
+  const ps = new kakao.maps.services.Places();
+  // 마커 이미지 변경하는 변수
+  const markerImage = new kakao.maps.MarkerImage(
+    "/img/mountain_due.png",
+    new kakao.maps.Size(64, 69),
+    { offset: new kakao.maps.Point(27, 69) }
+  );
+
   useEffect(() => {
     if (mapRef.current) {
-      const options = { center: new kakao.maps.LatLng(33.450701, 126.570667) };
-      const kakaoMap = new kakao.maps.Map(mapRef.current, options);
+      const defaultPosition = { lat: 37.5665, lng: 126.978 };
 
-      setMap(kakaoMap);
+      const initializeMap = (lat, lng) => {
+        const options = { center: new kakao.maps.LatLng(lat, lng), level: 6 };
+        const kakaoMap = new kakao.maps.Map(mapRef.current, options);
+
+        setMap(kakaoMap);
+        // initializeMap에 포함시켜서 함께 업데이트 시키기
+        searchNearbyPlaces(lat, lng, kakaoMap);
+      };
+
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude: userLat, longitude: userLng } = position.coords;
+            initializeMap(userLat, userLng);
+          },
+          () => {
+            initializeMap(defaultPosition.lat, defaultPosition.lng);
+          }
+        );
+      } else {
+        initializeMap(defaultPosition.lat, defaultPosition.lng);
+      }
     }
   }, []);
 
-  const searchPlaces = (e) => {
-    e.preventDefault();
-    // libraries services
-    const ps = new kakao.maps.services.Places();
-    ps.keywordSearch(value, placeSearchCB);
+  const searchNearbyPlaces = (lat, lng, kakaoMap) => {
+    const radius = 5000; // 5km 반경
+    const location = new kakao.maps.LatLng(lat, lng);
+
+    ps.keywordSearch(
+      "클라이밍",
+      (data, status) => placeSearchCB(data, status, kakaoMap),
+      {
+        location,
+        radius,
+        count: 15,
+      }
+    );
   };
 
-  // 콜백 함수 검색 결과 처리해주는 부분
-  const placeSearchCB = (data, status, pagination) => {
+  // 장소기반 검색
+  const placeSearchCB = (data, status, kakaoMap) => {
+    // status.ok 이면 마커 생성
     if (status === kakao.maps.services.Status.OK) {
-      // 정상적으로 검색이 완료됐으면
-      // 검색 목록과 마커를 표출합니다
-      displayPlaces(data);
-
-      // 페이지 번호를 표출합니다
-      //   displayPagination(pagination);
+      displayPlaces(data, kakaoMap);
     } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
-      alert("검색 결과가 존재하지 않습니다.");
-      return;
+      alert("검색 결과가 없습니다.");
     } else if (status === kakao.maps.services.Status.ERROR) {
-      alert("검색 결과 중 오류가 발생했습니다.");
-      return;
+      alert("검색 중 오류가 발생했습니다.");
     }
   };
 
-  // 검색 목록과 마커를 표출합니다.
-  // 좌표를 통해 검색을 해야될 것 같다.
-  const displayPlaces = async (places) => {
-    // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
-    // LatLngBounds 객체에 좌표를 추가합니다
+  const displayPlaces = (places, kakaoMap) => {
     const bounds = new kakao.maps.LatLngBounds();
-    let markers = [];
-    for (var i = 0; i < places.length; i++) {
-      getListItem(i, places);
-      // @ts-ignore
-      // markers 는 자체 생성한 객체이다.
-      // 따라서 places를 활용해서 places의 다른 데이터를
-      // 넣는 것 또한 가능 한 것이다.
-      markers.push({
+    const newMarkers = places.map((place) => {
+      bounds.extend(new kakao.maps.LatLng(place.y, place.x));
+      return {
         position: {
-          lat: places[i].y,
-          lng: places[i].x,
+          lat: place.y,
+          lng: place.x,
         },
-        content: places[i].place_name,
-      });
-      // @ts-ignore
-      bounds.extend(new kakao.maps.LatLng(places[i].y, places[i].x));
-    }
+        content: place.place_name,
+      };
+    });
 
-    setMarkers(markers);
-
-    // 마커 맵에 표시하는 함수
-    displayMarkerOnMap(markers, map, places);
-
-    // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
-    map.setBounds(bounds);
-  };
-
-  const getListItem = (index, places) => {
+    setMarkers(newMarkers);
     setPlaces(places);
+
+    // 초기 검색 후에만 지도의 범위를 설정
+    kakaoMap.setBounds(bounds);
   };
-  const displayMarkerOnMap = (markers, map, places) => {
-    // markers map state 값 받아와서 forEach로 사용
+
+  const displayMarkerOnMap = (markers, kakaoMap) => {
+    // 기존 마커 제거
     markers.forEach((marker) => {
       const kakaoMarker = new kakao.maps.Marker({
         position: new kakao.maps.LatLng(
           marker.position.lat,
           marker.position.lng
         ),
-        map: map, // 마커를 표시할 지도 객체
+        map: kakaoMap,
+        image: markerImage,
       });
+
       kakao.maps.event.addListener(kakaoMarker, "click", () => {
-        const infoWindow = new kakao.maps.InfoWindow({
-          content: `<div style="padding:5px;">${marker.content}</div>`,
-        });
-        infoWindow.open(map, kakaoMarker);
+        const result = window.confirm(`${marker.content}로 이동하시겠습니까?`);
+        if (result) {
+          navigate(`/${marker.id}/${marker.place_name}`);
+        }
       });
     });
   };
 
+  // markers, map이 바뀌면 map이 존재할 때 마커를 지워주는 역할
+  useEffect(() => {
+    if (map) {
+      displayMarkerOnMap(markers, map);
+    }
+  }, [markers, map]);
+
   return (
-    <div
-      style={{
-        width: "100%",
-        display: "inline-block",
-        marginLeft: "5px",
-        marginRight: "5px",
-      }}
-    >
+    <div style={{ width: "100%", display: "inline-block" }}>
       <div ref={mapRef} style={{ width: "99%", height: "500px" }}></div>
-      <form ref={formRef} onSubmit={searchPlaces}>
-        <input
-          onChange={(e) => {
-            setValue(e.target.value);
-          }}
-          type="text"
-          value={value}
-          id="keyword"
-          size="15"
-        />
-        <button type="submit">검색하기</button>
-      </form>
-      <div>
-        <ul>
-          {places.map((place, index) => {
-            return <li key={index}>{place.place_name}</li>;
-          })}
-        </ul>
-      </div>
+      <ul>
+        {places.map((place, index) => (
+          <li key={index}>{place.place_name}</li>
+        ))}
+      </ul>
     </div>
   );
 };
