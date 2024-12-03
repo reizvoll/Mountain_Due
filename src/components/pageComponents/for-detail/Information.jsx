@@ -48,20 +48,17 @@ const Information = () => {
     }, [spotId, spotName]);
 
     return (
-        <div className="flex justify-between border border-gray-500 rounded-2xl p-10">
-            <div className="flex flex-col justify-between">
-                <div className="flex flex-col gap-4">
-                    <h3 className="text-3xl text-[#2D2D2D] font-bold">{spotData?.place_name}</h3>
-                    <p className="text-xl text-[#848484] font-bold">{spotData?.category_name}</p>
-                    <p className="text-xl text-[#848484] font-bold">{spotData?.road_address_name}</p>
-                    <p className="text-xl text-[#848484] font-bold">(지번) {spotData?.address_name}</p>
-                    <p className="text-xl text-[#848484] font-bold">{spotData?.phone}</p>
-                </div>
+        <div className="flex justify-between border border-gray-500 rounded-2xl p-8">
+            <div className="flex flex-col gap-4">
+                <h3 className="text-3xl font-bold">{spotData?.place_name}</h3>
+                <p className="text-lg text-gray-500 font-bold">{spotData?.category_name}</p>
+                <p className="text-lg text-gray-500 font-bold">{spotData?.road_address_name}</p>
+                <p className="text-lg text-gray-500 font-bold">(지번) {spotData?.address_name}</p>
+                <p className="text-lg text-gray-500 font-bold">{spotData?.phone}</p>
             </div>
-
             <div className="flex items-end gap-8">
                 <Likes />
-                <div ref={mapRef} className="w-[480px] h-[320px]" />
+                <div ref={mapRef} className="w-[480px] h-[270px]" />
             </div>
         </div>
     );
