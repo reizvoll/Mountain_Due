@@ -1,4 +1,5 @@
-import { useState } from "react";
+import React from "react";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { IoIosArrowDropleft } from "react-icons/io";
 import { ToastContainer } from "react-toastify";
@@ -14,27 +15,29 @@ import PasswordInput from "../../components/pageComponents/for-auth/PasswordInpu
 import EmailInput from "../../components/pageComponents/for-auth/EmailInput";
 
 const Login = () => {
-  const [emailPrefix, setEmailPrefix] = useState(""); // EmailInput 내부에서 관리하는 이메일 prefix
-  const [emailDomain, setEmailDomain] = useState("custom"); // EmailInput 내부에서 관리하는 도메인
-  const [password, setPassword] = useState(""); // PasswordInput 내부에서 관리하는 비밀번호
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors, isValid },
+  } = useForm({
+    mode: "onChange", // 값 변경 시 유효성 검증
+    defaultValues: {
+      emailDomain: "custom", // emailDomain 초기값 설정
+    },
+  });
 
   const navigate = useNavigate();
   const showToast = useToastAlert();
   const dispatch = useDispatch(); // Redux dispatch 가져오기
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
+  const onSubmit = async (data) => {
+    const { emailPrefix, emailDomain, password } = data;
 
-    // 이메일 완성
+    // 이메일 조합
     const email =
-      emailDomain === "custom"
-        ? emailPrefix // 직접 입력
-        : `${emailPrefix}@${emailDomain}`; // 도메인 선택 시 조합
-
-    if (!email || !password) {
-      showToast("이메일과 비밀번호를 모두 입력해주세요.", "error");
-      return;
-    }
+      emailDomain === "custom" ? emailPrefix : `${emailPrefix}@${emailDomain}`;
 
     try {
       const { user, error } = await loginUser(email, password);
@@ -61,9 +64,7 @@ const Login = () => {
     }
   };
 
-  const handleGoHome = () => {
-    navigate("/");
-  };
+  const handleGoHome = () => navigate("/");
 
   return (
     <Background>
@@ -72,9 +73,9 @@ const Login = () => {
           className="absolute left-4 top-4 text-3xl cursor-pointer"
           onClick={handleGoHome}
         />
-        <div className="flex items-center mb-6  flex-col gap-2">
+        <div className="flex items-center mb-6 flex-col gap-2">
           <div className="w-72 mb-6">
-            <img src="img/mountain_due.png" alt="로고 이미지"></img>
+            <img src="img/mountain_due.png" alt="로고 이미지" />
           </div>
           <h1 className="text-center flex-grow text-2xl font-bold text-black">
             로그인
@@ -84,23 +85,29 @@ const Login = () => {
           </h2>
         </div>
         <form
-          onSubmit={handleLogin}
+          onSubmit={handleSubmit(onSubmit)}
           className="gap-5 flex flex-col justify-center items-center"
         >
-          {/* EmailInput 컴포넌트 사용 */}
+          {/* EmailInput 컴포넌트 */}
           <EmailInput
-            emailPrefix={emailPrefix}
-            setEmailPrefix={setEmailPrefix}
-            emailDomain={emailDomain}
-            setEmailDomain={setEmailDomain}
+            register={register}
+            setValue={setValue}
+            watch={watch}
+            errors={errors}
           />
 
-          {/* PasswordInput 컴포넌트 사용 */}
-          <PasswordInput password={password} setPassword={setPassword} />
+          {/* PasswordInput 컴포넌트 */}
+          <PasswordInput register={register} watch={watch} errors={errors} />
 
+          {/* 로그인 버튼 (isValid에 따라 활성화) */}
           <button
             type="submit"
-            className="w-1/2 bg-[#FFB200] text-white py-3 font-semibold rounded-full hover:bg-yellow-600 transition mt-8"
+            disabled={!isValid} // 유효하지 않은 경우 비활성화
+            className={`w-1/2 py-3 font-semibold rounded-full transition mt-8 ${
+              isValid
+                ? "bg-[#FFB200] text-white hover:bg-yellow-600"
+                : "bg-gray-300 text-gray-500 cursor-not-allowed"
+            }`}
           >
             로그인
           </button>
@@ -114,8 +121,8 @@ const Login = () => {
             </button>
           </p>
         </form>
+        <ToastContainer />
       </div>
-      <ToastContainer />
     </Background>
   );
 };
