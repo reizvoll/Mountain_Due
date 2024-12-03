@@ -50,7 +50,10 @@ const EmailInput = ({ register, setValue, errors, watch }) => {
           {...register("emailPrefix", {
             required: "이메일을 입력해주세요.",
             pattern: {
-              value: /^[A-Z0-9._%+-]+$/i, // prefix만 검사
+              value:
+                emailDomain === "custom"
+                  ? /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i // 전체 이메일 형식 검증
+                  : /^[A-Z0-9._%+-]+$/i, // prefix만 검증
             },
           })}
           className="w-full p-2 h-10 border rounded focus:outline-none focus:ring"
@@ -70,7 +73,22 @@ const EmailInput = ({ register, setValue, errors, watch }) => {
         </select>
       </div>
       {/* 이메일 유효성 검사 메시지 */}
-      {emailPrefix && !/^[A-Z0-9._%+-]+$/i.test(emailPrefix) ? ( // prefix 실시간 검증
+      {emailDomain === "custom" ? (
+        // emailDomain이 "custom"일 때 전체 이메일 형식 검증
+        emailPrefix &&
+        !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(emailPrefix) ? (
+          <p className="text-red-500 text-sm mt-1">
+            유효한 이메일 형식이 아닙니다.
+          </p>
+        ) : (
+          errors.emailPrefix && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.emailPrefix.message}
+            </p>
+          )
+        )
+      ) : // emailDomain이 "custom"이 아닐 때 prefix 검증
+      emailPrefix && !/^[A-Z0-9._%+-]+$/i.test(emailPrefix) ? (
         <p className="text-red-500 text-sm mt-1">
           유효한 이메일 형식이 아닙니다.
         </p>
