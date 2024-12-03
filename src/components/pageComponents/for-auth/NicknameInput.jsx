@@ -1,18 +1,17 @@
 import React from "react";
 
-const NicknameInput = ({ nickname, setNickname }) => {
-  return (
-    <div className="w-full">
-      <input
-        type="text"
-        placeholder="닉네임"
-        value={nickname}
-        onChange={(e) => setNickname(e.target.value)}
-        required
-        className="w-full p-2 border rounded focus:outline-none focus:ring"
-      />
-    </div>
-  );
-};
+const NicknameInput = ({ register, errors }) => (
+  <div className="w-full">
+    <input
+      type="text"
+      placeholder="닉네임"
+      {...register("nickname", { required: "닉네임을 입력해주세요." })}
+      className="w-full p-2 border rounded focus:outline-none focus:ring"
+    />
+    {errors.nickname && (
+      <p className="text-red-500 text-sm mt-3">{errors.nickname.message}</p>
+    )}
+  </div>
+);
 
 export default NicknameInput;
