@@ -1,4 +1,3 @@
-import { useState } from "react";
 import YoutubeBeginner from "./YoutubeBeginner";
 import YoutubeClimbing from "./YoutubeClimbing";
 import useFetchClimbResults from "../../../hooks/useFetchClimbResults";

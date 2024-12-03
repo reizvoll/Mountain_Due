@@ -28,7 +28,7 @@ const YoutubeClimbing = ({
                       }}
                     ></img>
                     <p className="mt-3 text-[18px]">
-                      {item.title.substring(0, 15).trim() + "..."}
+                      {item.title.substring(0, 17).trim() + "..."}
                     </p>
                   </div>
                 );
