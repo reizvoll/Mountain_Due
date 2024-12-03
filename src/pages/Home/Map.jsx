@@ -124,11 +124,12 @@ const Map = () => {
   return (
     <div style={{ width: "100%", display: "inline-block" }}>
       <div ref={mapRef} style={{ width: "99%", height: "500px" }}></div>
-      <ul>
+
+      {/* 리스트 확인 <ul>
         {places.map((place, index) => (
           <li key={index}>{place.place_name}</li>
         ))}
-      </ul>
+      </ul> */}
     </div>
   );
 };
