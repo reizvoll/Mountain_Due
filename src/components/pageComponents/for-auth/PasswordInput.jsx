@@ -65,6 +65,10 @@ const PasswordInput = ({ register, watch, errors, isSignup }) => {
   const watchPassword = watch("password");
   const watchConfirmPassword = watch("confirmPassword");
 
+  // 비밀번호 확인 에러 메시지 여부
+  const confirmPasswordError =
+    isSignup && watchConfirmPassword !== watchPassword;
+
   return (
     <>
       <div className="relative w-full">
@@ -85,7 +89,7 @@ const PasswordInput = ({ register, watch, errors, isSignup }) => {
         >
           {showPassword ? <FaEyeSlash /> : <FaEye />}
         </div>
-        {/* 실시간 유효성 검사 우선 */}
+        {/* 비밀번호 입력창 에러 메시지 */}
         {watchPassword && !passwordPattern.test(watchPassword) ? (
           <p className="text-red-500 text-sm mt-3">
             비밀번호는 6~20자리이며 영문과 숫자를 포함해야 합니다.
@@ -106,8 +110,7 @@ const PasswordInput = ({ register, watch, errors, isSignup }) => {
             placeholder="비밀번호 확인"
             {...register("confirmPassword", {
               required: "비밀번호 확인을 입력해주세요.",
-              validate: (value) =>
-                value === watchPassword || "비밀번호가 일치하지 않습니다.",
+              validate: (value) => value === watchPassword,
             })}
             className="w-full p-2 border rounded focus:outline-none focus:ring"
           />
@@ -118,7 +121,13 @@ const PasswordInput = ({ register, watch, errors, isSignup }) => {
             {showConfirmedPassword ? <FaEyeSlash /> : <FaEye />}
           </div>
           {/* 에러 메시지 */}
-          {errors.confirmPassword && (
+          {/* 실시간 비밀번호 확인 에러 메시지 */}
+          {confirmPasswordError && (
+            <p className="text-red-500 text-sm mt-3">
+              비밀번호가 일치하지 않습니다.
+            </p>
+          )}
+          {errors.confirmPassword && !confirmPasswordError && (
             <p className="text-red-500 text-sm mt-3">
               {errors.confirmPassword.message}
             </p>
