@@ -10,7 +10,7 @@ import { useParams } from 'react-router-dom';
 
 const Comments = () => {
     const { id: spotId } = useParams();
-    const { comments, createMutation } = useComments(spotId);
+    const { comments, createMutation, deleteMutation } = useComments(spotId);
     const { user } = useUser();
 
     const { values, handleChange } = useForm({
@@ -21,6 +21,13 @@ const Comments = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         createMutation.mutate({ userId: user.id, placeId: spotId, ...values });
+    };
+
+    /* 리뷰 삭제 */
+    const handleDelete = (commentId) => {
+        if (window.confirm('리뷰를 삭제하시겠습니까?')) {
+            deleteMutation.mutate(commentId);
+        }
     };
 
     return (
@@ -48,10 +55,12 @@ const Comments = () => {
                         </div>
                         <div className="flex justify-between items-center border border-gray-300 rounded-xl p-4">
                             <p className="text-lg">{comment.content}</p>
-                            <div className="flex gap-4">
-                                <LuPencilLine className="text-lg text-black" />
-                                <RiDeleteBin6Line className="text-lg text-black" />
-                            </div>
+                            {user?.id === comment.user.id && (
+                                <div className="flex gap-4">
+                                    <LuPencilLine className="text-lg text-black cursor-pointer" />
+                                    <RiDeleteBin6Line className="text-lg text-black cursor-pointer" onClick={() => handleDelete(comment.id)} />
+                                </div>
+                            )}
                         </div>
                     </div>
                 ))}
