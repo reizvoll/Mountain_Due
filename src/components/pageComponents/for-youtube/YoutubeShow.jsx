@@ -1,87 +1,23 @@
-// import { useQuery } from "@tanstack/react-query";
-// import Btn from "../ui/Btn";
-// import { getBeginnerResults, getClimbResults } from "../../../api/youtube";
 import { useState } from "react";
 import YoutubeBeginner from "./YoutubeBeginner";
 import YoutubeClimbing from "./YoutubeClimbing";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { getBeginnerResults, getClimbResults } from "../../../api/youtube";
+import useFetchClimbResults from "../../../hooks/useFetchClimbResults";
+import useFetchBeginnerResults from "../../../hooks/useFetchBeginnerResults";
+import useModalHandler from "../../../hooks/useModalHandler";
 
 const YoutubeShow = () => {
-  const fetchClimbResults = async ({ pageParam = "" }) => {
-    const data = await getClimbResults(pageParam);
-    return {
-      items: data.items,
-      nextPageToken: data.nextPageToken,
-    };
-  };
-
-  const fetchBeginnerResults = async ({ pageParam = "" }) => {
-    const data = await getBeginnerResults(pageParam);
-    return {
-      items: data.items,
-      nextPageToken: data.nextPageToken,
-    };
-  };
+  const { climbResult, fetchNextClimb, hasNextPage, isFetchingNextPage } =
+    useFetchClimbResults();
 
   const {
-    data: climbResult,
-    fetchNextPage: fetchNextClimb,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useInfiniteQuery({
-    queryKey: ["climbResults"],
-    queryFn: fetchClimbResults,
-    getNextPageParam: (lastPage) => lastPage.nextPageToken || undefined,
-    select: (data) => {
-      return data.pages.map((page) => ({
-        items: page.items.map((item) => ({
-          id: item.snippet.resourceId.videoId,
-          title: item.snippet.title,
-          thumbnail: item.snippet.thumbnails.high.url,
-        })),
-        nextPageToken: page.nextPageToken,
-      }));
-    },
-  });
+    beginnerHasNextPage,
+    beginnerResult,
+    beginnerisFetchingNextPage,
+    fetchNextBeginner,
+  } = useFetchBeginnerResults();
 
-  const {
-    data: beginnerResult,
-    fetchNextPage: fetchNextBeginner,
-    hasNextPage: beginnerHasNextPage,
-    isFetchingNextPage: beginnerisFetchingNextPage,
-  } = useInfiniteQuery({
-    queryKey: ["beginnerResult"],
-    queryFn: fetchBeginnerResults,
-    getNextPageParam: (lastPage) => lastPage.nextPageToken || undefined,
-    select: (data) => {
-      console.log(data);
-      return data.pages.map((page) => ({
-        items: page.items.map((item) => ({
-          id: item.snippet.resourceId.videoId,
-          title: item.snippet.title,
-          thumbnail: item.snippet.thumbnails.high.url,
-        })),
-        nextPageToken: page.nextPageToken,
-      }));
-    },
-  });
-
-  const [isClicked, setIsClicked] = useState(false);
-  const [youtubeId, setYoutubeId] = useState("");
-
-  const modalClickHandler = (item) => {
-    console.log(item);
-    const toggle = !isClicked;
-    setIsClicked(toggle);
-    const { id } = item;
-    setYoutubeId(id);
-  };
-
-  const modalClose = (e) => {
-    e.stopPropagation();
-    setIsClicked(false);
-  };
+  const { isClicked, youtubeId, modalClickHandler, modalClose } =
+    useModalHandler();
 
   return (
     <>
