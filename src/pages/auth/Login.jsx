@@ -6,6 +6,9 @@ import useToastAlert from "../../hooks/useToastAlert";
 import { loginUser } from "../../api/login";
 import "react-toastify/dist/ReactToastify.css";
 
+import { useDispatch } from "react-redux"; // Redux dispatch 사용
+import { setUser } from "../../redux/slices/userSlice"; // Redux 액션 추가
+
 import Background from "../../components/pageComponents/for-auth/Background";
 import PasswordInput from "../../components/pageComponents/for-auth/PasswordInput";
 import EmailInput from "../../components/pageComponents/for-auth/EmailInput";
@@ -17,6 +20,7 @@ const Login = () => {
 
   const navigate = useNavigate();
   const showToast = useToastAlert();
+  const dispatch = useDispatch(); // Redux dispatch 가져오기
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -33,7 +37,7 @@ const Login = () => {
     }
 
     try {
-      const { error } = await loginUser(email, password);
+      const { user, error } = await loginUser(email, password);
       if (error) {
         showToast(
           "로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.",
@@ -42,7 +46,16 @@ const Login = () => {
         return;
       }
 
-      showToast("로그인에 성공했습니다!", "success", () => navigate("/home"));
+      // 사용자 정보를 Redux 상태에 저장
+      dispatch(
+        setUser({
+          id: user.id,
+          nickname: user.nickname,
+          img_url: user.img_url,
+        })
+      );
+
+      showToast("로그인에 성공했습니다!", "success", () => navigate("/"));
     } catch (error) {
       showToast("알 수 없는 오류가 발생했습니다. 다시 시도해주세요.", "error");
     }
