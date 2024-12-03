@@ -565,7 +565,6 @@
   resolved "https://registry.yarnpkg.com/@rollup/rollup-win32-x64-msvc/-/rollup-win32-x64-msvc-4.27.4.tgz#67d516613c9f2fe42e2d8b78e252d0003179d92c"
   integrity sha512-3j4jx1TppORdTAoBJRd+/wJRGCPC0ETWkXOecJ6PPZLj6SptXkrXcNqdj0oclbKML6FkQltdz7bBA3rUSirZug==
 
-<<<<<<< HEAD
 "@supabase/auth-js@2.65.1":
   version "2.65.1"
   resolved "https://registry.yarnpkg.com/@supabase/auth-js/-/auth-js-2.65.1.tgz#4f6ab9ece2e6613d2648ecf5482800f3766479ea"
@@ -622,14 +621,13 @@
     "@supabase/postgrest-js" "1.16.3"
     "@supabase/realtime-js" "2.10.9"
     "@supabase/storage-js" "2.7.1"
-=======
+
 "@tanstack/match-sorter-utils@^8.7.0":
   version "8.19.4"
   resolved "https://registry.yarnpkg.com/@tanstack/match-sorter-utils/-/match-sorter-utils-8.19.4.tgz#dacf772b5d94f4684f10dbeb2518cf72dccab8a5"
   integrity sha512-Wo1iKt2b9OT7d+YGhvEPD3DXvPv2etTusIMhMUoG7fbhmxcXCtIjJDEygy91Y2JFlwGyjqiBPRozme7UD8hoqg==
   dependencies:
     remove-accents "0.5.0"
->>>>>>> 9a4e85eb2dd9fab9e791ff54cadd48f70c288aa9
 
 "@tanstack/query-core@5.61.5":
   version "5.61.5"
