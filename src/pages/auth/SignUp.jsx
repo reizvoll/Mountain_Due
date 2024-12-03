@@ -21,26 +21,22 @@ const SignUp = () => {
     handleSubmit,
     watch,
     setValue,
+    setError,
+    clearErrors,
+
     formState: { errors, isValid },
   } = useForm({
     mode: "onChange", // 입력값이 변경될 때마다 유효성 검사
     defaultValues: {
       emailDomain: "custom", // emailDomain 초기값 설정
+      nicknameAvailable: false, // 닉네임 중복 확인 상태 초기화
     },
   });
 
   const handleGoHome = () => navigate("/");
 
   const onSubmit = async (data) => {
-    const {
-      emailPrefix,
-      emailDomain,
-      password,
-      confirmPassword,
-      nickname,
-      image,
-    } = data;
-
+    const { emailPrefix, emailDomain, password, nickname, image } = data;
 
     const fullEmail =
       emailDomain === "custom" ? emailPrefix : `${emailPrefix}@${emailDomain}`;
@@ -123,7 +119,14 @@ const SignUp = () => {
             errors={errors}
             isSignup={true}
           />
-          <NicknameInput register={register} errors={errors} />
+          <NicknameInput
+            register={register}
+            setError={setError}
+            clearErrors={clearErrors}
+            errors={errors}
+            watch={watch}
+            setValue={setValue}
+          />
           <button
             type="submit"
             className="w-1/2 bg-[#FFB200] text-white py-3 font-semibold rounded-full hover:bg-yellow-600 transition mt-8  disabled:opacity-60 disabled:cursor-not-allowed disabled:grayscale"
