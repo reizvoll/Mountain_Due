@@ -20,7 +20,6 @@ const useFetchBeginnerResults = () => {
     queryFn: fetchBeginnerResults,
     getNextPageParam: (lastPage) => lastPage.nextPageToken || undefined,
     select: (data) => {
-      console.log(data);
       return data.pages.map((page) => ({
         items: page.items.map((item) => ({
           id: item.snippet.resourceId.videoId,
