@@ -54,3 +54,30 @@ export const saveUserInfo = async (userId, nickname, img_url) => {
   ]);
   return error;
 };
+
+
+export const signupGoogle = async () => {
+  try {
+    // Google OAuth 회원가입 시작
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        queryParams: {
+          access_type: "offline",
+          prompt: "consent",
+        },
+        redirectTo: "http://localhost:5173/login?signup=success", // 상태 전달
+      },
+    });
+
+    if (error) {
+      console.error("Google OAuth 인증 실패:", error.message);
+      return { error: "Google OAuth 인증에 실패했습니다." };
+    }
+
+    return { message: "회원가입이 완료되었습니다." };
+  } catch (err) {
+    console.error("Google OAuth 처리 중 오류:", err.message);
+    return { error: "Google OAuth 처리 중 오류가 발생했습니다." };
+  }
+};
