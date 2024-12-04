@@ -1,6 +1,6 @@
 // import { supabase } from './supabaseClient';
 
-// // 새로 다시짜자.. 
+// // 새로 다시짜자..
 // async function updateProfileTxt(uid, dataObj) {
 //     const { columnName, newData } = new ;
 
@@ -87,10 +87,11 @@ import { supabase } from "./supabaseClient";
  * @param {string} newImageUrl 새로운 이미지 URL
  */
 export const updateUserProfileImage = async (userId, newImageUrl) => {
-  if (!userId || !newImageUrl) throw new Error("필수 매개변수가 누락되었습니다.");
+  if (!userId || !newImageUrl)
+    throw new Error("필수 매개변수가 누락되었습니다.");
 
   const { error } = await supabase
-    .from("images") // 테이블 이름을 정확히 확인해야 함
+    .from("users") // 테이블 이름을 정확히 확인해야 함
     .update({ img_url: newImageUrl }) // 새 이미지 URL로 업데이트
     .eq("id", userId); // 사용자 ID 조건
 
@@ -106,7 +107,8 @@ export const updateUserProfileImage = async (userId, newImageUrl) => {
  * @param {string} newNickname 새로운 닉네임
  */
 export const updateUserNickname = async (userId, newNickname) => {
-  if (!userId || !newNickname) throw new Error("필수 매개변수가 누락되었습니다.");
+  if (!userId || !newNickname)
+    throw new Error("필수 매개변수가 누락되었습니다.");
 
   const { error } = await supabase
     .from("users") // 테이블 이름을 정확히 확인해야 함

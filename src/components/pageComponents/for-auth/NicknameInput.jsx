@@ -8,7 +8,7 @@ const NicknameInput = ({
   clearErrors,
   setValue,
   watch,
-  trigger
+  trigger,
 }) => {
   const [checking, setChecking] = useState(false);
   const [nicknameAvailable, setNicknameAvailable] = useState(false);
@@ -22,10 +22,10 @@ const NicknameInput = ({
     setValue("nicknameAvailable", false); // 닉네임 사용 가능 상태 초기화
   }, [nickname, clearErrors, setValue]);
 
-    useEffect(() => {
-      // 닉네임 사용 가능 상태가 변경되면 유효성 검사 트리거
-      trigger("nickname");
-    }, [nicknameAvailable, trigger]);
+  useEffect(() => {
+    // 닉네임 사용 가능 상태가 변경되면 유효성 검사 트리거
+    trigger("nickname");
+  }, [nicknameAvailable, trigger]);
 
   const checkNickname = async (nickname) => {
     if (!nickname) return;

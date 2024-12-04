@@ -8,14 +8,31 @@ import {
   updateUserNickname,
 } from "../../../api/myPageData";
 import useUser from "../../../hooks/useUser";
-import NicknameInput from "../for-auth/NicknameInput";
 import ProfileImageUploader from "../for-auth/ProfileImageUploader";
 import { uploadProfileImage } from "../../../api/signup";
+import { useForm } from "react-hook-form";
+import NicknameInput from "../for-auth/NicknameInput";
 
 const MyPage = ({ isOpen, onClose }) => {
   const { user } = useUser();
   const dispatch = useDispatch(); // Redux dispatch 가져오기
   const [newImage, setNewImage] = useState(null);
+
+  const {
+    register,
+    watch,
+    handleSubmit,
+    setValue,
+    setError,
+    clearErrors,
+    trigger,
+    formState: { errors, isValid },
+  } = useForm({
+    mode: "onChange", // 입력값이 변경될 때마다 유효성 검사
+    defaultValues: {
+      nicknameAvailable: false, // 닉네임 중복 확인 상태 초기화
+    },
+  });
 
   if (!isOpen) return null;
 
@@ -34,7 +51,9 @@ const MyPage = ({ isOpen, onClose }) => {
   };
 
   // 닉네임 업데이트
-  const handleNicknameUpdate = async (nickname) => {
+  const handleNicknameUpdate = async (data) => {
+    const { nickname } = data;
+    console.log(data);
     try {
       await updateUserNickname(user.id, nickname); // Supabase DB 업데이트
       dispatch(setUser({ ...user, nickname })); // Redux 상태 업데이트
@@ -63,36 +82,43 @@ const MyPage = ({ isOpen, onClose }) => {
         </button>
 
         {/* 헤더 */}
-        <h2 className="text-[28px] text-[#333] font-bold text-center mb-8">My Page</h2>
+        <h2 className="text-[28px] text-[#333] font-bold text-center mb-8">
+          My Page
+        </h2>
 
         {/* 프로필 이미지 업로드 */}
         <ProfileImageUploader setImage={setNewImage} />
         <button
           onClick={handleProfileImageUpdate}
           disabled={!newImage}
-          className={`w-full py-3 rounded-full font-semibold text-white mt-4 ${newImage ? "bg-blue-500 hover:bg-blue-600" : "bg-gray-300 cursor-not-allowed"
-            }`}
+          className={`w-full py-3 rounded-full font-semibold text-white mt-4 ${
+            newImage
+              ? "bg-blue-500 hover:bg-blue-600"
+              : "bg-gray-300 cursor-not-allowed"
+          }`}
         >
           프로필 이미지 업데이트
         </button>
 
         {/* 닉네임 입력 */}
         <div className="mt-8">
-          <NicknameInput
-            register={() => { }} // 실제로는 React Hook Form에서 필요한 설정 제공
-            errors={{}} // React Hook Form 에러 객체 전달
-            setError={() => { }} // React Hook Form의 에러 설정 함수
-            clearErrors={() => { }} // React Hook Form 에러 초기화 함수
-            setValue={() => { }} // React Hook Form 값 설정 함수
-            watch={() => user.nickname} // 현재 닉네임 값 전달
-            trigger={() => { }} // React Hook Form 유효성 검사 트리거
-          />
-          <button
-            onClick={() => handleNicknameUpdate(user.nickname)} // 닉네임 업데이트 호출
-            className="w-full py-3 mt-4 bg-blue-500 text-white rounded-full font-semibold hover:bg-blue-600"
-          >
-            닉네임 업데이트
-          </button>
+          <form onSubmit={handleSubmit(handleNicknameUpdate)}>
+            <NicknameInput
+              register={register}
+              setError={setError}
+              clearErrors={clearErrors}
+              errors={errors}
+              watch={watch}
+              setValue={setValue}
+              trigger={trigger}
+            />
+            <button
+              className="w-full py-3 mt-4 bg-blue-500 text-white rounded-full font-semibold hover:bg-blue-600 disabled:opacity-60 disabled:cursor-not-allowed disabled:grayscale"
+              disabled={!isValid}
+            >
+              닉네임 업데이트
+            </button>
+          </form>
         </div>
       </div>
     </div>,
