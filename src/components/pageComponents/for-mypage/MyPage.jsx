@@ -71,7 +71,7 @@ const MyPage = ({ isOpen, onClose }) => {
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-[20px] w-full max-w-md p-20 relative overflow-y-auto max-h-[90vh] shadow-xl"
+        className="bg-white rounded-[20px] w-full max-w-sm p-10 relative overflow-y-auto max-h-[90vh] shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* 닫기 버튼 */}
