@@ -6,6 +6,7 @@ import Home from '../pages/Home/Home';
 import Map from '../pages/Home/Map';
 import Detail from '../pages/Detail/Detail';
 import RecoverPassword from "../pages/auth/RecoverPassword";
+import LikedPlaces from '../pages/Home/LikedPlaces';
 
 const Router = () => {
     return (
@@ -17,6 +18,7 @@ const Router = () => {
           <Route path="/" element={<Home />} />
           <Route path="/map" element={<Map />} />
           <Route path="/:id/:name" element={<Detail />} />
+          <Route path='likes' element={<LikedPlaces />} />
           <Route path="/youtube" element={<Youtube />} />
         </Routes>
       </BrowserRouter>
