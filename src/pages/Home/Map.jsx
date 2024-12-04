@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Pagination from "../../components/pageComponents/for-map/Pagination";
+import { GiConsoleController } from "react-icons/gi";
 
 const Map = () => {
   const navigate = useNavigate();
@@ -14,8 +15,8 @@ const Map = () => {
 
   // 마커 이미지 설정
   const markerImage = new kakao.maps.MarkerImage(
-    "/img/mountain_due.png",
-    new kakao.maps.Size(64, 69),
+    "/img/marker.png",
+    new kakao.maps.Size(56, 56),
     { offset: new kakao.maps.Point(27, 69) }
   );
 
@@ -130,18 +131,44 @@ const Map = () => {
     );
   };
 
+  const choosePlace = (place) => {
+    if (!map) return; // 지도 객체가 없으면 함수 종료
+    // 기존 마커 제거
+    removeMarkers();
+
+    // 선택된 장소의 위치 설정
+    const selectedPosition = new kakao.maps.LatLng(place.y, place.x);
+
+    // 새 마커 생성
+    const kakaoMarker = new kakao.maps.Marker({
+      position: selectedPosition,
+      map, // 현재 지도 객체에 추가
+      image: markerImage,
+    });
+    kakao.maps.event.addListener(kakaoMarker, "click", () => {
+      const result = window.confirm(`${place.place_name}로 이동하시겠습니까?`);
+      if (result) {
+        navigate(`/${place.id}/${place.place_name}`);
+      }
+    });
+
+    // 지도 중심 이동 및 확대 레벨 조정
+    map.setCenter(selectedPosition);
+    map.setLevel(5);
+
+    setMarkers([kakaoMarker]);
+  };
+
   return (
     <>
-      <div className={"flex justify-between items-end"}>
-        <h2 className={"text-black w-full"}>
-          <div>
-            주변 클라이밍장<span>도심 속 클라이밍장을 찾아보세요</span>
-          </div>
+      <div className="flex justify-between items-end w-[1200px] m-auto">
+        <h2 className="text-black w-full">
+          주변 클라이밍장<span>도심 속 클라이밍장을 찾아보세요</span>
         </h2>
-        <div className={"flex gap-4 w-full"}>
+        <div className={"flex gap-x-6 w-full"}>
           {cities.map((city) => (
             <button
-              className={"w-20 h-6 bg-[#FFB200] text-white rounded-3xl"}
+              className="w-[76px] h-8 bg-[#FFB200] text-white rounded-3xl transition-colors duration-300 hover:bg-[#fbce65]"
               key={city}
               value={city}
               onClick={handleCityClick}
@@ -151,25 +178,26 @@ const Map = () => {
           ))}
         </div>
       </div>
-      <div style={{ width: "100%", display: "inline-block" }}>
-        <div ref={mapRef} style={{ width: "99%", height: "500px" }}></div>
-      </div>
-      <div className="flex">
-        <div
-          style={{
-            width: "30%",
-            padding: "10px",
-            borderRight: "1px solid #ddd",
-          }}
-        >
-          <h3>검색 결과</h3>
+      <div className="flex justify-center inline-block pt-[30px] h-[600px]">
+        <div className="z-10 bg-white overflow-y-auto h-full w-[320px] p-2 border-r border-[#ddd]">
+          <h3 className="text-xl px-1">검색 결과</h3>
           <ul>
             {mapList.map((place, index) => (
-              <li key={index} style={{ marginBottom: "10px" }}>
-                <p>{index}</p>
-                <strong>{place.place_name}</strong>
-                <br />
-                <span>{place.address_name}</span>
+              <li
+                key={index}
+                className="px-2 py-2 flex-col transition-colors duration-300 hover:bg-blue-100"
+                style={{
+                  marginBottom: "10px",
+                  cursor: "pointer",
+                  display: "flex",
+                }}
+                onClick={() => choosePlace(place)}
+              >
+                <div className="w-full">
+                  <span className="mr-3 text-blue-500 text-lg">{index}</span>
+                  {place.place_name}
+                </div>
+                <div className="text-sm pt-1">{place.address_name}</div>
               </li>
             ))}
           </ul>
@@ -178,23 +206,11 @@ const Map = () => {
             pagination={pagination}
             selectedPage={selectedPage}
             setSelectedPage={setSelectedPage}
+            removeMarkers={removeMarkers}
           ></Pagination>
-          {/* {pagination && (
-            <div style={{ marginTop: "20px" }}>
-              {Array.from({ length: pagination.last }, (_, i) => (
-                <button
-                  key={i}
-                  onClick={() => {
-                    displayPagination(i + 1);
-                  }}
-                  style={{ margin: "0 5px" }}
-                >
-                  {i + 1}
-                </button>
-              ))}
-            </div>
-          )} */}
         </div>
+
+        <div ref={mapRef} className="w-[870px] h-full overflow-hidden"></div>
       </div>
     </>
   );
