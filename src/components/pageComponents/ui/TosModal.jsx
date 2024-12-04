@@ -1,11 +1,14 @@
 import { IoClose } from "react-icons/io5";
+import ReactDOM from 'react-dom';
 
 const TosModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
-  return (
+  // Map이 약관을 뚫고 나오는 오류 수정
+  return ReactDOM.createPortal(
     <div
       className="fixed top-0 left-0 w-full h-screen bg-black bg-opacity-50 flex items-center justify-center"
+      style={{ zIndex: 1050 }}
       onClick={onClose}
     >
       <div
@@ -63,8 +66,9 @@ const TosModal = ({ isOpen, onClose }) => {
           <IoClose />
         </button>
       </div>
-    </div>
-  )
-}
+    </div>,
+    document.getElementById("portal-root")
+  );
+};
 
-export default TosModal
+export default TosModal;

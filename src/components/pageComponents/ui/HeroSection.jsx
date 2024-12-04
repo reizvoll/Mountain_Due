@@ -37,7 +37,7 @@ const HeroSection = () => {
 
       {/* 버튼 */}
       <div
-        className="absolute top-[330px] left-[67px] w-[150px] h-[45px] rounded-[25px] bg-[#FFB300] flex items-center justify-center hover:bg-[#FF8D03] cursor-pointer"
+        className="absolute top-[330px] left-[67px] w-[150px] h-[45px] rounded-[25px] bg-[#FFB200] flex items-center justify-center hover:bg-[#FF8D03] cursor-pointer"
         onClick={isLoggedIn ? openModalHandler : () => nav("/signup")} // 로그인 상태에 따라 동작 변경
       >
         <span className="text-white font-bold text-[20px] leading-[20px] cursor-pointer">
@@ -50,7 +50,7 @@ const HeroSection = () => {
         <MyPage isOpen={isModalOpen} onClose={closeModalHandler} />
       )}
     </div>
-  )
-}
+  );
+};
 
-export default HeroSection
+export default HeroSection;
