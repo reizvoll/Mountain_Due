@@ -11,6 +11,7 @@ const Map = () => {
   const [mapList, setMapList] = useState([]);
   const [pagination, setPagination] = useState(null);
   const [selectedPage, setSelectedPage] = useState(1);
+  const [selected, setSelected] = useState(null);
   const ps = new kakao.maps.services.Places();
 
   // 마커 이미지 설정
@@ -132,6 +133,7 @@ const Map = () => {
   };
 
   const choosePlace = (place) => {
+    setSelected(place);
     if (!map) return; // 지도 객체가 없으면 함수 종료
     // 기존 마커 제거
     removeMarkers();
@@ -168,7 +170,7 @@ const Map = () => {
         <div className={"flex gap-x-6 w-full"}>
           {cities.map((city) => (
             <button
-              className="w-[76px] h-8 bg-[#FFB200] text-white rounded-3xl transition-colors duration-300 hover:bg-[#fbce65]"
+              className="w-[76px] h-8 bg-[#FFB200] text-white rounded-3xl transition-colors duration-300 hover:text-[#333] hover:bg-[#FFD54F]"
               key={city}
               value={city}
               onClick={handleCityClick}
@@ -179,18 +181,17 @@ const Map = () => {
         </div>
       </div>
       <div className="flex justify-center inline-block pt-[30px] h-[600px]">
-        <div className="z-10 bg-white overflow-y-auto h-full w-[320px] p-2 border-r border-[#ddd]">
-          <h3 className="text-xl px-1">검색 결과</h3>
+        <div className="z-10 bg-white overflow-y-auto h-full w-[320px] border-r border-[#ddd]">
+          <h3 className="text-xl px-1 border-b border-[#eee] pb-[25px]">
+            검색 결과
+          </h3>
           <ul>
             {mapList.map((place, index) => (
               <li
                 key={index}
-                className="px-2 py-2 flex-col transition-colors duration-300 hover:bg-blue-100"
-                style={{
-                  marginBottom: "10px",
-                  cursor: "pointer",
-                  display: "flex",
-                }}
+                className={`mb-0 border-b border-[#eee] px-2 py-2 flex flex-col mb-2 cursor-pointer transition-colors duration-300 ${
+                  selected === place ? "bg-blue-100" : "hover:bg-blue-100"
+                }`}
                 onClick={() => choosePlace(place)}
               >
                 <div className="w-full">
