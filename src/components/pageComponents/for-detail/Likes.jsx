@@ -4,7 +4,8 @@ import { useLikes } from '../../../hooks/useLikes';
 
 const Likes = () => {
     const { id: spotId } = useParams();
-    const { user } = useUser();
+    const { user, isLoggedIn } = useUser();
+
     const { likes, createMutation, deleteMutation } = useLikes({ userId: user.id, placeId: spotId });
 
     /* 좋아요 추가 및 삭제 */
@@ -13,8 +14,8 @@ const Likes = () => {
     };
 
     return (
-        <p className="text-2xl font-bold cursor-pointer" onClick={handleToggle}>
-            <span className="text-2xl text-red-500 font-bold">{likes?.isLiked ? '♥' : '♡'}</span> {likes?.count}
+        <p className="text-2xl font-bold cursor-pointer" onClick={isLoggedIn ? handleToggle : undefined}>
+            <span className="text-2xl text-red-500 font-bold">{!isLoggedIn || likes?.isLiked ? '♥' : '♡'}</span> {likes?.count}
         </p>
     );
 };

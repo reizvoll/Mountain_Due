@@ -39,10 +39,8 @@ const Information = () => {
                 // 검색 결과를 기준으로 지도 범위 재설정
                 map.setBounds(bounds);
 
-                // DB에 데이터가 존재하지 않으면 추가
-                if (!place) {
-                    createMutation.mutate(matchData);
-                }
+                // DB에 place 데이터 추가
+                createMutation.mutate(matchData);
             }
         });
     }, [spotId, spotName]);
