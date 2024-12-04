@@ -35,17 +35,13 @@ const PasswordInput = ({ register, watch, errors, isSignup }) => {
           {showPassword ? <FaEyeSlash /> : <FaEye />}
         </div>
         {/* 비밀번호 입력창 에러 메시지 */}
-        {watchPassword && !passwordPattern.test(watchPassword) ? (
-          <p className="text-red-500 text-sm mt-3">
-            비밀번호는 6~20자리이며 영문과 숫자를 포함해야 합니다.
-          </p>
-        ) : (
-          errors.password && (
-            <p className="text-red-500 text-sm mt-3">
-              {errors.password.message}
-            </p>
-          )
-        )}
+        {watchPassword && watchPassword.length > 0
+          ? !passwordPattern.test(watchPassword) && (
+              <p className="text-red-500 text-sm mt-3">
+                비밀번호는 6~20자리이며 영문과 숫자를 포함해야 합니다.
+              </p>
+            )
+          : null}
       </div>
       {/* 비밀번호 확인 입력 */}
       {isSignup && (
@@ -66,17 +62,13 @@ const PasswordInput = ({ register, watch, errors, isSignup }) => {
             {showConfirmedPassword ? <FaEyeSlash /> : <FaEye />}
           </div>
           {/* 에러 메시지 */}
-          {/* 실시간 비밀번호 확인 에러 메시지 */}
-          {confirmPasswordError && (
-            <p className="text-red-500 text-sm mt-3">
-              비밀번호가 일치하지 않습니다.
-            </p>
-          )}
-          {errors.confirmPassword && !confirmPasswordError && (
-            <p className="text-red-500 text-sm mt-3">
-              {errors.confirmPassword.message}
-            </p>
-          )}
+          {watchConfirmPassword && watchConfirmPassword.length > 0
+            ? confirmPasswordError && (
+                <p className="text-red-500 text-sm mt-3">
+                  비밀번호가 일치하지 않습니다.
+                </p>
+              )
+            : null}
         </div>
       )}
     </>

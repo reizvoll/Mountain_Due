@@ -4,7 +4,12 @@ import { useNavigate, Link } from "react-router-dom";
 import { IoIosArrowDropleft } from "react-icons/io";
 import { ToastContainer } from "react-toastify";
 import useToastAlert from "../../hooks/useToastAlert";
-import { signUpUser, uploadProfileImage, saveUserInfo } from "../../api/signup";
+import {
+  signUpUser,
+  uploadProfileImage,
+  saveUserInfo,
+  signupGoogle,
+} from "../../api/signup";
 import "react-toastify/dist/ReactToastify.css";
 
 import ProfileImageUploader from "../../components/pageComponents/for-auth/ProfileImageUploader";
@@ -81,12 +86,19 @@ const SignUp = () => {
     if (insertError) {
       showToast(insertError.message, "error");
     } else {
-      showToast("회원가입이 완료되었습니다!", "success", () =>
-        navigate("/login")
-      );
+      showToast("회원가입이 완료되었습니다!", "success");
     }
   };
 
+const handleGoogleSignup = async () => {
+  try {
+    await signupGoogle(); // Google OAuth 회원가입 시작
+    // 리디렉션이 발생하므로 추가 로직은 필요하지 않습니다.
+  } catch (err) {
+    console.error("Google 회원가입 처리 중 오류:", err.message);
+    showToast("Google 회원가입 중 오류가 발생했습니다.", "error");
+  }
+};
   return (
     <Background>
       <div className="bg-white relative p-8 rounded-2xl shadow-lg w-1/4 max-w-2xl min-w-96">
@@ -135,6 +147,22 @@ const SignUp = () => {
           >
             회원가입
           </button>
+          {/* 간편 회원가입 섹션 */}
+          <div className="mt-8 flex flex-col items-center w-full">
+            <p className="text-sm text-gray-600">또는</p>
+            <button
+              type="button"
+              onClick={handleGoogleSignup}
+              className="w-full flex items-center justify-center mt-4 py-3 bg-white border border-gray-300 rounded-full font-medium text-gray-600 hover:bg-gray-100 transition shadow-md"
+            >
+              <img
+                src="img/google.png"
+                alt="Google Logo"
+                className="w-5 h-5 mr-3"
+              />
+              Google로 회원가입
+            </button>
+          </div>
           <p className="text-sm text-gray-600 mt-4 text-center">
             이미 계정이 있으신가요?{" "}
             <Link
