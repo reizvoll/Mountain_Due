@@ -5,19 +5,21 @@ import Youtube from '../pages/youtube/Youtube';
 import Home from '../pages/Home/Home';
 import Map from '../pages/Home/Map';
 import Detail from '../pages/Detail/Detail';
+import RecoverPassword from "../pages/auth/RecoverPassword";
 
 const Router = () => {
     return (
-        <BrowserRouter>
-            <Routes>
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<SignUp />} />
-                <Route path="/" element={<Home />} />
-                <Route path="/map" element={<Map />} />
-                <Route path="/:id/:name" element={<Detail />} />
-                <Route path="/youtube" element={<Youtube />} />
-            </Routes>
-        </BrowserRouter>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/recover" element={<RecoverPassword />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/map" element={<Map />} />
+          <Route path="/:id/:name" element={<Detail />} />
+          <Route path="/youtube" element={<Youtube />} />
+        </Routes>
+      </BrowserRouter>
     );
 };
 
