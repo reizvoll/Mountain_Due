@@ -163,9 +163,10 @@ const Map = () => {
 
   return (
     <>
-      <div className="flex justify-between items-end w-[1200px] m-auto">
-        <h2 className="text-black w-full">
-          주변 클라이밍장<span>도심 속 클라이밍장을 찾아보세요</span>
+      <div className="flex justify-between items-end w-[1200px] m-auto mt-[50px]">
+        <h2 className="text-[#333] w-full">
+          주변 클라이밍장&nbsp;&nbsp;&nbsp;
+          <span className="text-[#666]">도심 속 클라이밍장을 찾아보세요</span>
         </h2>
         <div className={"flex gap-x-6 w-full"}>
           {cities.map((city) => (
@@ -180,7 +181,7 @@ const Map = () => {
           ))}
         </div>
       </div>
-      <div className="flex justify-center inline-block pt-[30px] h-[600px]">
+      <div className="flex justify-center inline-block pt-[30px] h-[600px] mb-[50px]">
         <div className="z-10 bg-white overflow-y-auto h-full w-[320px] border-r border-[#ddd]">
           <h3 className="text-xl px-1 border-b border-[#eee] pb-[25px]">
             검색 결과
@@ -211,7 +212,7 @@ const Map = () => {
           ></Pagination>
         </div>
 
-        <div ref={mapRef} className="w-[870px] h-full overflow-hidden"></div>
+        <div ref={mapRef} className="w-[870px] h-full overflow-hidden" ></div>
       </div>
     </>
   );
