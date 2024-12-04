@@ -2,6 +2,8 @@ import Router from "./shared/Router";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { store, persistor } from "./redux/config/configStore";
+import HeroSection from './components/pageComponents/ui/HeroSection';
+import Footer from "./components/pageComponents/ui/Footer";
 
 function App() {
   return (
