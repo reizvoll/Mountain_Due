@@ -80,12 +80,17 @@ const Comments = () => {
                 {comments?.map((comment) => (
                     <div key={comment.id} className="flex flex-col gap-2 border border-gray-300 rounded-2xl p-4">
                         <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 bg-gray-300 rounded-full" />
+                            <img className="w-8 h-8 bg-gray-300 rounded-full" src={comment.user.img_url} />
                             <p className="text-base font-bold">{comment.user.nickname}</p>
                         </div>
                         {updateValues.id === comment.id ? (
                             <form className="flex items-center" onSubmit={handleSubmit}>
-                                <textarea className="w-full border border-gray-500 rounded-2xl resize-none ml-8 mr-4 p-4" name="content" value={updateValues.content} onChange={handleUpdateChange}></textarea>
+                                <textarea
+                                    className="w-full border border-gray-500 rounded-2xl resize-none ml-8 mr-4 p-4"
+                                    name="content"
+                                    value={updateValues.content}
+                                    onChange={handleUpdateChange}
+                                ></textarea>
                                 <FaCheck className="text-xl cursor-pointer" onClick={() => handleUpdate(comment.id)} />
                             </form>
                         ) : (
