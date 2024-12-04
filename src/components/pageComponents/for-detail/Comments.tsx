@@ -12,7 +12,7 @@ import { FaCheck } from 'react-icons/fa';
 const Comments = () => {
     const { id: spotId } = useParams();
     const { comments, createMutation, updateMutation, deleteMutation } = useComments(spotId);
-    const { user } = useUser();
+    const { user, isLoggedIn } = useUser();
 
     const {
         values: createValues,
@@ -66,16 +66,18 @@ const Comments = () => {
                 <BiSolidComment className="text-xl" />
                 <p className="text-xl font-bold">{comments?.length}</p>
             </div>
-            <form className="flex items-center gap-2" onSubmit={handleSubmit}>
-                <textarea
-                    className="w-full border border-gray-500 rounded-2xl resize-none p-4"
-                    name="content"
-                    placeholder="리뷰를 입력해 주세요."
-                    value={createValues.content}
-                    onChange={handleCreateChange}
-                ></textarea>
-                <Btn onClick={() => {}}>작성하기</Btn>
-            </form>
+            {isLoggedIn && (
+                <form className="flex items-center gap-2" onSubmit={handleSubmit}>
+                    <textarea
+                        className="w-full border border-gray-500 rounded-2xl resize-none p-4"
+                        name="content"
+                        placeholder="리뷰를 입력해 주세요."
+                        value={createValues.content}
+                        onChange={handleCreateChange}
+                    ></textarea>
+                    <Btn onClick={() => {}}>작성하기</Btn>
+                </form>
+            )}
             <div className="flex flex-col gap-4">
                 {comments?.map((comment) => (
                     <div key={comment.id} className="flex flex-col gap-2 border border-gray-300 rounded-2xl p-4">

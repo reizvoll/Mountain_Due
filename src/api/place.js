@@ -10,11 +10,15 @@ export const fetchPlaceAPI = async (placeId) => {
 export const createPlaceAPI = async (data) => {
     const { id, place_name, road_address_name, x, y } = data;
 
-    await supabase.from('places').insert({
-        id,
-        place_name,
-        road_address_name,
-        longitude: x,
-        latitude: y
-    });
+    const place = await fetchPlaceAPI(id);
+
+    if (!place.length) {
+        await supabase.from('places').insert({
+            id,
+            place_name,
+            road_address_name,
+            longitude: x,
+            latitude: y
+        });
+    }
 };
