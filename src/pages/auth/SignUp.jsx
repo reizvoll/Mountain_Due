@@ -23,7 +23,7 @@ const SignUp = () => {
     setValue,
     setError,
     clearErrors,
-
+    trigger,
     formState: { errors, isValid },
   } = useForm({
     mode: "onChange", // 입력값이 변경될 때마다 유효성 검사
@@ -44,15 +44,15 @@ const SignUp = () => {
     let imageUrl = "/img/default_profile.png";
 
     // 프로필 이미지 업로드
-    if (image?.[0]) {
+    if (image) {
       const { data: uploadData, error: uploadError } = await uploadProfileImage(
-        image[0]
+        image
       );
       if (uploadError) {
         showToast(uploadError.message, "error");
         return;
       }
-      imageUrl = uploadData.path;
+      imageUrl = uploadData?.path ?? imageUrl;
     }
 
     // 사용자 등록
@@ -126,6 +126,7 @@ const SignUp = () => {
             errors={errors}
             watch={watch}
             setValue={setValue}
+            trigger={trigger}
           />
           <button
             type="submit"

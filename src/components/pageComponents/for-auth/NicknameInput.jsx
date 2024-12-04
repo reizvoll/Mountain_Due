@@ -1,22 +1,3 @@
-// import React from "react";
-// import { supabase } from "../../api/supabaseClient"; // Supabase 클라이언트
-
-// const NicknameInput = ({ register, errors }) => (
-//   <div className="w-full">
-//     <input
-//       type="text"
-//       placeholder="닉네임"
-//       {...register("nickname", { required: "닉네임을 입력해주세요." })}
-//       className="w-full p-2 border rounded focus:outline-none focus:ring"
-//     />
-//     {errors.nickname && (
-//       <p className="text-red-500 text-sm mt-3">{errors.nickname.message}</p>
-//     )}
-//   </div>
-// );
-
-// export default NicknameInput;
-
 import React, { useState, useEffect } from "react";
 import { supabase } from "../../../api/supabaseClient";
 
@@ -27,6 +8,7 @@ const NicknameInput = ({
   clearErrors,
   setValue,
   watch,
+  trigger
 }) => {
   const [checking, setChecking] = useState(false);
   const [nicknameAvailable, setNicknameAvailable] = useState(false);
@@ -34,10 +16,16 @@ const NicknameInput = ({
   const nickname = watch("nickname"); // 닉네임 값 실시간 감지
 
   useEffect(() => {
-    // 닉네임 변경 시 상태 초기화 및 React Hook Form 상태 업데이트
+    // 닉네임 변경 시 상태 초기화
     setNicknameAvailable(false);
-    clearErrors("nickname"); // 기존 에러 초기화
-  }, [nickname, clearErrors]);
+    clearErrors("nickname");
+    setValue("nicknameAvailable", false); // 닉네임 사용 가능 상태 초기화
+  }, [nickname, clearErrors, setValue]);
+
+    useEffect(() => {
+      // 닉네임 사용 가능 상태가 변경되면 유효성 검사 트리거
+      trigger("nickname");
+    }, [nicknameAvailable, trigger]);
 
   const checkNickname = async (nickname) => {
     if (!nickname) return;
@@ -64,7 +52,7 @@ const NicknameInput = ({
         clearErrors("nickname");
         setNicknameAvailable(true);
         // React Hook Form에 닉네임 사용 가능 상태 업데이트
-        setValue("nicknameAvailable", true, { shouldValidate: true });
+        setValue("nicknameAvailable", true);
       }
     } catch (err) {
       console.error("Error checking nickname:", err.message);

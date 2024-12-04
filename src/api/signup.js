@@ -1,4 +1,5 @@
 import { supabase } from "./supabaseClient";
+import { v4 as uuidv4 } from "uuid";
 
 /**
  * 사용자 등록
@@ -12,10 +13,10 @@ export const signUpUser = async ({ email, password }) => {
  * 사용자 프로필 이미지 업로드
  */
 export const uploadProfileImage = async (image) => {
-  const fileName = `users/${Date.now()}_${image.name}`;
-  const { data, error } = await supabase.storage
-    .from("images")
-    .upload(fileName, image);
+  // 파일 이름을 고유한 UUID로 설정
+  const fileName = `users/${Date.now()}_${uuidv4()}.${image.name.split('.').pop()}`;
+
+  const { data, error } = await supabase.storage.from("images").upload(fileName, image);
   return { data, error };
 };
 
