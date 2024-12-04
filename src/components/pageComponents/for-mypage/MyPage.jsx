@@ -1,11 +1,49 @@
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import { IoClose } from "react-icons/io5";
-import useUser from '../../../hooks/useUser';
+import { useDispatch } from "react-redux";
+import { setUser } from "../../../redux/slices/userSlice";
+import {
+  updateUserProfileImage,
+  updateUserNickname,
+} from "../../../api/myPageData";
+import useUser from "../../../hooks/useUser";
+import NicknameInput from "../for-auth/NicknameInput";
+import ProfileImageUploader from "../for-auth/ProfileImageUploader";
+import { uploadProfileImage } from "../../../api/signup";
 
 const MyPage = ({ isOpen, onClose }) => {
-  const { user } = useUser()
-  console.log(user)
+  const { user } = useUser();
+  const dispatch = useDispatch(); // Redux dispatch 가져오기
+  const [newImage, setNewImage] = useState(null);
+
   if (!isOpen) return null;
+
+  // 프로필 이미지 업데이트
+  const handleProfileImageUpdate = async () => {
+    if (!newImage) return;
+    try {
+      const imageUrl = await uploadProfileImage(newImage); // Supabase에 이미지 업로드
+      await updateUserProfileImage(user.id, imageUrl); // Supabase DB 업데이트
+      dispatch(setUser({ ...user, img_url: imageUrl })); // Redux 상태 업데이트
+      alert("프로필 이미지가 성공적으로 업데이트되었습니다.");
+    } catch (error) {
+      console.error(error);
+      alert("프로필 이미지 업데이트 중 오류가 발생했습니다.");
+    }
+  };
+
+  // 닉네임 업데이트
+  const handleNicknameUpdate = async (nickname) => {
+    try {
+      await updateUserNickname(user.id, nickname); // Supabase DB 업데이트
+      dispatch(setUser({ ...user, nickname })); // Redux 상태 업데이트
+      alert("닉네임이 성공적으로 업데이트되었습니다.");
+    } catch (error) {
+      console.error(error);
+      alert("닉네임 업데이트 중 오류가 발생했습니다.");
+    }
+  };
 
   return ReactDOM.createPortal(
     <div
@@ -27,48 +65,33 @@ const MyPage = ({ isOpen, onClose }) => {
         {/* 헤더 */}
         <h2 className="text-[28px] text-[#333] font-bold text-center mb-8">My Page</h2>
 
-        {/* 프로필 이미지 */}
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-32 h-32 rounded-full bg-gray-200 overflow-hidden shadow-md">
-            <img
-              src="/mountain_due.png"
-              alt="profile img"
-              className="w-full h-full object-cover"
-            />
-          </div>
-          <label className="py-2 px-4 bg-purple-500 text-white rounded-full text-sm cursor-pointer hover:bg-purple-700">
-            프로필 이미지 바꾸기
-            <input type="file" accept="image/*" className="hidden" />
-          </label>
-        </div>
+        {/* 프로필 이미지 업로드 */}
+        <ProfileImageUploader setImage={setNewImage} />
+        <button
+          onClick={handleProfileImageUpdate}
+          disabled={!newImage}
+          className={`w-full py-3 rounded-full font-semibold text-white mt-4 ${newImage ? "bg-blue-500 hover:bg-blue-600" : "bg-gray-300 cursor-not-allowed"
+            }`}
+        >
+          프로필 이미지 업데이트
+        </button>
 
-        {/* 프로필 정보 */}
-        <div className="flex flex-col items-center gap-6 mt-6">
-
-          {/* 이름 */}
-          <div className="w-full flex justify-between items-center border border-gray-300 rounded-lg p-4 bg-gray-50">
-            <span className="text-gray-600 font-medium">이름</span>
-            <div className="flex items-center gap-2">
-              <span className="text-gray-800 font-semibold">{user.nickname}</span>
-              <button className="px-4 py-2 bg-blue-500 text-white rounded-full text-sm hover:bg-blue-700">
-                수정
-              </button>
-            </div>
-          </div>
-
-          {/* 버튼 */}
-          <div className="flex justify-between gap-4 w-full mt-4">
-            <button className="w-1/2 py-3 bg-yellow-400 text-white rounded-full font-semibold text-sm hover:bg-yellow-500">
-              비밀번호 변경
-            </button>
-            <button className="w-1/2 py-3 bg-red-500 text-white rounded-full font-semibold text-sm hover:bg-red-600">
-              로그아웃
-            </button>
-          </div>
-
-          {/* 계정 삭제 */}
-          <button className="text-gray-600 hover:text-purple-500 mt-4 font-medium">
-            Mountian_Due
+        {/* 닉네임 입력 */}
+        <div className="mt-8">
+          <NicknameInput
+            register={() => { }} // 실제로는 React Hook Form에서 필요한 설정 제공
+            errors={{}} // React Hook Form 에러 객체 전달
+            setError={() => { }} // React Hook Form의 에러 설정 함수
+            clearErrors={() => { }} // React Hook Form 에러 초기화 함수
+            setValue={() => { }} // React Hook Form 값 설정 함수
+            watch={() => user.nickname} // 현재 닉네임 값 전달
+            trigger={() => { }} // React Hook Form 유효성 검사 트리거
+          />
+          <button
+            onClick={() => handleNicknameUpdate(user.nickname)} // 닉네임 업데이트 호출
+            className="w-full py-3 mt-4 bg-blue-500 text-white rounded-full font-semibold hover:bg-blue-600"
+          >
+            닉네임 업데이트
           </button>
         </div>
       </div>
