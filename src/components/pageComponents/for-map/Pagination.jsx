@@ -1,9 +1,17 @@
-const Pagination = ({ selectedPage, setSelectedPage, pagination }) => {
+const Pagination = ({
+  selectedPage,
+  setSelectedPage,
+  pagination,
+  removeMarkers,
+}) => {
   if (!pagination) return null;
 
   const displayPagination = (page) => {
-    if (pagination && pagination.gotoPage) {
-      pagination.gotoPage(page);
+    if (page !== selectedPage) {
+      if (pagination && pagination.gotoPage) {
+        removeMarkers();
+        pagination.gotoPage(page);
+      }
     }
   };
   return (
@@ -20,7 +28,7 @@ const Pagination = ({ selectedPage, setSelectedPage, pagination }) => {
               style={{ margin: "0 5px" }}
               className={`mx-2 px-4 py-2 rounded ${
                 selectedPage === i + 1
-                  ? "bg-green-500 text-white"
+                  ? "bg-blue-500 text-white"
                   : "bg-gray-200 text-black"
               }`}
             >
