@@ -69,25 +69,25 @@ const Login = () => {
 
   return (
     <Background>
-      <div className="bg-white p-10 rounded-2xl relative shadow-lg w-1/4 max-w-2xl min-w-96">
+      <div className="bg-white p-10 rounded-2xl relative shadow-lg w-1/4 max-w-sm min-w-96">
         <IoIosArrowDropleft
           className="absolute left-4 top-4 text-3xl cursor-pointer"
           onClick={handleGoHome}
         />
         <div className="flex items-center mb-6 flex-col gap-2">
-          <div className="w-72 mb-6">
-            <img src="img/mountain_due.png" alt="로고 이미지" />
-          </div>
-          <h1 className="text-center flex-grow text-2xl font-bold text-black">
+          <h1 className="text-center flex-grow text-2xl text-black">
             로그인
           </h1>
           <h2 className="text-center flex-grow text-sm text-gray-500 font-medium">
             이메일과 비밀번호를 입력해주세요.
           </h2>
+          <div className="w-40">
+            <img src="img/mountain_due.png" alt="로고 이미지" />
+          </div>
         </div>
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="gap-5 flex flex-col justify-center items-center"
+          className="gap-4 flex flex-col justify-center items-center"
         >
           {/* EmailInput 컴포넌트 */}
           <EmailInput
@@ -104,7 +104,7 @@ const Login = () => {
           <button
             type="submit"
             disabled={!isValid} // 유효하지 않은 경우 비활성화
-            className={`w-1/2 py-3 font-semibold rounded-full transition mt-8 ${
+            className={`w-2/3 py-3 font-semibold rounded-full transition ${
               isValid
                 ? "bg-[#FFB200] text-white hover:bg-[#FF8D03]"
                 : "bg-gray-300 text-gray-500 cursor-not-allowed"
@@ -112,7 +112,7 @@ const Login = () => {
           >
             로그인
           </button>
-          <p className="text-sm text-gray-600 mt-4 text-center">
+          <p className="text-sm text-gray-600 mt-3 text-center">
             계정이 없으신가요?{" "}
             <button
               onClick={() => navigate("/signup")}
@@ -121,7 +121,7 @@ const Login = () => {
               회원가입
             </button>
           </p>
-          <p className="text-sm text-gray-600 mt-2 text-center">
+          <p className="text-sm text-gray-600 text-center">
             비밀번호를 잊으셨나요?{" "}
             <Link
               to="/recover"

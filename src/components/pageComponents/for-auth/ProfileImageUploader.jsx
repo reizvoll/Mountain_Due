@@ -18,8 +18,10 @@ const ProfileImageUploader = ({ setImage }) => {
     if (file) setProfilePreview(URL.createObjectURL(file)); // Update the preview to the new image
   };
 
+
   return (
-    <div className="flex items-center justify-center mb-6 flex-col">
+    // UI : mb수정
+    <div className="flex items-center justify-center mb-3 flex-col"> 
       <label htmlFor="profileImage" className="cursor-pointer">
         <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden border-2 border-black">
           {profilePreview ? (
