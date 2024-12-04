@@ -61,7 +61,7 @@ const Map = () => {
         count: 15,
       }
     );
-  };g
+  };
 
   const placeSearchCB = (data, status, kakaoMap, pagination) => {
     if (status === kakao.maps.services.Status.OK) {
