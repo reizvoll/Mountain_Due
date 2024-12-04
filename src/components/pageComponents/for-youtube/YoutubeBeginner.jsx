@@ -49,4 +49,5 @@ const YoutubeBeginner = ({
     );
   }
 };
+
 export default YoutubeBeginner;

@@ -9,7 +9,7 @@ const MainLayout = () => {
       <Outlet />
       <Footer />
     </div>
-  )
-}
+  );
+};
 
-export default MainLayout
+export default MainLayout;
