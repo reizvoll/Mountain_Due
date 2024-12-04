@@ -11,6 +11,7 @@ function App() {
       {/* Redux Store 제공 */}
       <PersistGate loading={null} persistor={persistor}>
         {/* Persisted 상태 복구 여기서 로딩 시 UI 화면 새로 지정하실건가요?*/}
+        <HeroSection />
         <Router />
       </PersistGate>
     </Provider>

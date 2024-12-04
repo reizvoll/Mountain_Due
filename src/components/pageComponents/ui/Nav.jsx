@@ -4,9 +4,11 @@ import { FaHome, FaYoutube } from "react-icons/fa";
 import { IoBookmarks } from "react-icons/io5";
 import { FiLogIn, FiLogOut } from "react-icons/fi";
 import MyPage from "../for-mypage/MyPage";
+import useUser from "../../../hooks/useUser";
 
 
 const Nav = () => {
+  const { user } = useUser();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModalHandler = () => {
@@ -26,7 +28,7 @@ const Nav = () => {
           <FaYoutube className="text-white text-[35px]" />
           <FiLogOut
             className="text-white text-[35px] cursor-pointer"
-            onClick={handleLogout}
+            onClick={user.logout}
           />
         </div>
         <div
