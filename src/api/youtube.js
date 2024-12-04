@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_KEY = "AIzaSyC0NeCVkjuKSGZiKLC92ppNvbMSBTUxBoA";
+const API_KEY = import.meta.env.VITE_YOUTUBE_API_KEY;
 
 const youtubeAPI = axios.create({
   baseURL: "https://youtube.googleapis.com/youtube/v3",
@@ -32,7 +32,6 @@ export const getClimbResults = async (pageToken = "") => {
         pageToken,
       },
     });
-    console.log("YouTube API response:", response);
     return response.data;
   } catch (error) {
     console.error("Error fetching climb results:", error);
@@ -48,7 +47,6 @@ export const getBeginnerResults = async (pageToken = "") => {
         pageToken,
       },
     });
-    console.log("YouTube API response:", response);
     return response.data;
   } catch (error) {
     console.error("Error fetching climb results:", error);
