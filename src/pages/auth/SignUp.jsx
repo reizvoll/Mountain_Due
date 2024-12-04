@@ -130,7 +130,7 @@ const SignUp = () => {
           />
           <button
             type="submit"
-            className="w-1/2 bg-[#FFB200] text-white py-3 font-semibold rounded-full hover:bg-yellow-600 transition mt-8  disabled:opacity-60 disabled:cursor-not-allowed disabled:grayscale"
+            className="w-1/2 bg-[#FFB200] text-white py-3 font-semibold rounded-full hover:bg-[#FF8D03] transition mt-8  disabled:opacity-60 disabled:cursor-not-allowed disabled:grayscale"
             disabled={!isValid} // 모든 유효성 검사 충족 시 활성화
           >
             회원가입
