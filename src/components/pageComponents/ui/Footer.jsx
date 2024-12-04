@@ -22,8 +22,8 @@ const Footer = () => {
 
       <div className="absolute left-[71.33%] top-[20%] flex ">
         <img
-          src="/카아드.png" // public 폴더에 저장된 이미지 경로
-          alt="Footer Image"
+          src="/img/card.png" // public 폴더에 저장된 이미지 경로
+          alt="Card_Img"
           className="w-[80px] h-[80px] object-contain"
         />
       </div>
