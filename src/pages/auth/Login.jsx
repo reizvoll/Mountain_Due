@@ -1,6 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { IoIosArrowDropleft } from "react-icons/io";
 import { ToastContainer } from "react-toastify";
 import useToastAlert from "../../hooks/useToastAlert";
@@ -119,6 +119,15 @@ const Login = () => {
             >
               회원가입
             </button>
+          </p>
+          <p className="text-sm text-gray-600 mt-2 text-center">
+            비밀번호를 잊으셨나요?{" "}
+            <Link
+              to="/recover"
+              className="text-blue-500 font-medium text-sm hover:underline"
+            >
+              비밀번호 재설정
+            </Link>
           </p>
         </form>
         <ToastContainer />
