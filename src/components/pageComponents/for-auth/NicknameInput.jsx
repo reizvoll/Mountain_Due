@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from "../../../api/supabaseClient";
+import useUser from "../../../hooks/useUser";
 
 const NicknameInput = ({
   register,
@@ -12,7 +13,7 @@ const NicknameInput = ({
 }) => {
   const [checking, setChecking] = useState(false);
   const [nicknameAvailable, setNicknameAvailable] = useState(false);
-
+  const {user, isLoggedIn} = useUser();
   const nickname = watch("nickname"); // 닉네임 값 실시간 감지
 
   useEffect(() => {
@@ -66,7 +67,7 @@ const NicknameInput = ({
       <div className="flex items-center gap-2">
         <input
           type="text"
-          placeholder="닉네임"
+          placeholder={isLoggedIn ? user.nickname : "닉네임"} // 로그인 여부에 따른 placeholder 설정
           maxLength={20} // 닉네임 글자수 제한
           {...register("nickname", {
             required: "닉네임을 입력해주세요.",
