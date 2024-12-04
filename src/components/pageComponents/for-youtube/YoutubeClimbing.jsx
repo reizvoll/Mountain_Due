@@ -21,7 +21,7 @@ const YoutubeClimbing = ({
                 return (
                   <div key={item.id}>
                     <img
-                      className="w-[300px] h-[165px] object-cover rounded-md hover:cursor-pointer"
+                      className="w-[300px] h-[165px] object-cover rounded-md hover:scale-105 cursor-pointer"
                       src={item.thumbnail}
                       onClick={() => {
                         modalClickHandler(item);

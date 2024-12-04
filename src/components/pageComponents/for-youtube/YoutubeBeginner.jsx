@@ -22,7 +22,7 @@ const YoutubeBeginner = ({
                   <div key={item.id}>
                     <img
                       src={item.thumbnail}
-                      className="w-[300px] h-[165px] object-cover rounded-md hover:cursor-pointer"
+                      className="w-[300px] h-[165px] object-cover rounded-md hover:scale-105 cursor-pointer"
                       onClick={() => {
                         modalClickHandler(item);
                       }}
