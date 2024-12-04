@@ -14,7 +14,7 @@ const Likes = () => {
     };
 
     return (
-        <p className="text-2xl font-bold cursor-pointer" onClick={isLoggedIn && handleToggle}>
+        <p className="text-2xl font-bold cursor-pointer" onClick={isLoggedIn ? handleToggle : undefined}>
             <span className="text-2xl text-red-500 font-bold">{!isLoggedIn || likes?.isLiked ? '♥' : '♡'}</span> {likes?.count}
         </p>
     );
