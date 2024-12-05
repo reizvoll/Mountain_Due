@@ -197,7 +197,9 @@ const Map = () => {
         <div className={"flex gap-x-6 w-full"}>
           {cities.map((city) => (
             <button
-              className="w-[76px] h-8 bg-[#FFB200] text-white rounded-3xl transition-colors duration-300 hover:text-[#333] hover:bg-[#FFD54F]"
+              className={`w-[76px] h-8 bg-[#FFB200] text-white rounded-3xl transition-colors duration-300 hover:bg-[#FF8D03] ${
+                selected === city ? "bg-[#FF8D03]" : "bg-[#FFB200] "
+              }`}
               key={city}
               value={city}
               onClick={() => handleCityClick(city)}
@@ -212,7 +214,7 @@ const Map = () => {
           <h3 className="flex justify-between text-xl px-1 border-b border-[#eee] pb-[25px]">
             검색 결과
             <button
-              className="text-sm font-normal w-[110px] h-8 bg-[#FFB200] text-white rounded-3xl transition-colors duration-300 hover:text-[#333] hover:bg-[#FFD54F]"
+              className="text-sm font-normal w-[110px] h-8 bg-[#FFB200] text-white rounded-3xl transition-colors duration-300 hover:bg-[#FF8D03]"
               onClick={() => setTrigger((prev) => !prev)}
             >
               현재 위치로 이동
