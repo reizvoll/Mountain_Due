@@ -75,14 +75,13 @@ const PlaceContainer = () => {
             <div className="p-4">
               <h2 className="text-[#333] text-xl font-bold">{place.place_name}</h2>
               <p className="text-[#666">{place.road_address_name}</p>
-              <p className="text-[#666]">{place.phone || "전화번호 없음"}</p>
             </div>
             <div className="h-40 bg-gray-200">
               {/* Replace with actual image URL if available */}
               <img
-                src={`https://via.placeholder.com/400x300?text=${place.place_name}`}
+                src={'/img/mountain_due.png'}
                 alt={place.place_name}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain"
               />
             </div>
           </div>
