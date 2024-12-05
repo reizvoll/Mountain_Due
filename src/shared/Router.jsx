@@ -6,7 +6,9 @@ import Home from "../pages/Home/Home";
 import Map from "../pages/Home/Map";
 import Detail from "../pages/Detail/Detail";
 import GoogleCallback from "../pages/auth/GoogleCallback";
+import LikedPlaces from "../pages/Home/LikedPlaces";
 
+// likes 부분 어.. 네.. 저것만 protected Routes 할거에요!
 const Router = () => {
   return (
     <BrowserRouter>
@@ -18,6 +20,7 @@ const Router = () => {
         <Route path="/map" element={<Map />} />
         <Route path="/:id/:name" element={<Detail />} />
         <Route path="/youtube" element={<Youtube />} />
+        <Route path="/likes" element={<LikedPlaces />} />
       </Routes>
     </BrowserRouter>
   );
