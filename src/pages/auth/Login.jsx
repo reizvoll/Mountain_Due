@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, Link, useLocation } from "react-router-dom";
-import { IoIosArrowDropleft } from "react-icons/io";
+import { FaHome } from "react-icons/fa";
 import { ToastContainer } from "react-toastify";
 import useToastAlert from "../../hooks/useToastAlert";
 import { loginUser, loginWithGoogle } from "../../api/login";
@@ -78,26 +78,6 @@ const Login = () => {
     }
   };
 
-  // const handleGoogleLogin = async () => {
-  //   try {
-  //     const { user, error } = await loginWithGoogle();
-  //     if (error) {
-  //       showToast(error, "error");
-  //       return;
-  //     }
-
-  //     dispatch(
-  //       setUser({
-  //         id: user.id,
-  //         nickname: user.nickname,
-  //         img_url: user.img_url,
-  //       })
-  //     );
-  //   } catch (err) {
-  //     console.error("Google 로그인 처리 중 오류:", err.message);
-  //     showToast("Google 로그인 중 오류가 발생했습니다.", "error");
-  //   }
-  // };
 
   const handleGoogleLogin = async () => {
     try {
@@ -119,7 +99,7 @@ const Login = () => {
   return (
     <Background>
       <div className="bg-white p-10 rounded-2xl relative shadow-lg w-1/4 max-w-sm min-w-96">
-        <IoIosArrowDropleft
+        <FaHome
           className="absolute left-4 top-4 text-3xl cursor-pointer"
           onClick={handleGoHome}
         />
