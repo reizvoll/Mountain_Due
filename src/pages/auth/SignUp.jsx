@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, Link } from "react-router-dom";
-import { FaHome } from "react-icons/io";
+import { FaHome } from "react-icons/fa";
 import { ToastContainer } from "react-toastify";
 import useToastAlert from "../../hooks/useToastAlert";
 import {

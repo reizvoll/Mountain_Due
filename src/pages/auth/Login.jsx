@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, Link, useLocation } from "react-router-dom";
-import { FaHome } from "react-icons/io";
+import { FaHome } from "react-icons/fa";
 import { ToastContainer } from "react-toastify";
 import useToastAlert from "../../hooks/useToastAlert";
 import { loginUser, loginWithGoogle } from "../../api/login";
