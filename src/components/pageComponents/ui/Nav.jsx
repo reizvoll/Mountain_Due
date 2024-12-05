@@ -6,6 +6,7 @@ import { FiLogIn, FiLogOut } from "react-icons/fi";
 import MyPage from "../for-mypage/MyPage";
 import useUser from "../../../hooks/useUser";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 
 const Nav = () => {
@@ -59,8 +60,18 @@ const Nav = () => {
       <div
         className="w-[43px] h-[43px] bg-[#D9D9D9] rounded-full cursor-pointer"
         onClick={() => {
-          alert("로그인이 필요합니다.");
-          window.location.href = "/login"; // Redirects to the login page
+           Swal.fire({
+            title: `로그인이 필요합니다`,
+            text: `로그인 하러 가시겠습니까?`,
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonText: "예",
+            cancelButtonText: "아니오",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              navigate(`/login`); // Redirects to the login page
+            }
+          });
         }}
       />
       <MyPage isOpen={isModalOpen} onClose={closeModalHandler} />
