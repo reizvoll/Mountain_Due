@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Pagination from "../../components/pageComponents/for-map/Pagination";
 import { GiConsoleController } from "react-icons/gi";
+import showAlert from "../../util/showAlert";
+import Swal from "sweetalert2";
 
 const Map = () => {
   const navigate = useNavigate();
@@ -12,6 +14,7 @@ const Map = () => {
   const [pagination, setPagination] = useState(null);
   const [selectedPage, setSelectedPage] = useState(1);
   const [selected, setSelected] = useState(null);
+  const [trigger, setTrigger] = useState(false);
   const ps = new kakao.maps.services.Places();
 
   // 마커 이미지 설정
@@ -28,7 +31,14 @@ const Map = () => {
       const initializeMap = (lat, lng) => {
         const options = { center: new kakao.maps.LatLng(lat, lng), level: 6 };
         const kakaoMap = new kakao.maps.Map(mapRef.current, options);
-
+        // 오른쪽 컨트롤러
+        const mapTypeControl = new kakao.maps.MapTypeControl();
+        kakaoMap.addControl(
+          mapTypeControl,
+          kakao.maps.ControlPosition.TOPRIGHT
+        );
+        const zoomControl = new kakao.maps.ZoomControl();
+        kakaoMap.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
         setMap(kakaoMap);
         searchNearbyPlaces(lat, lng, kakaoMap);
       };
@@ -47,7 +57,7 @@ const Map = () => {
         initializeMap(defaultPosition.lat, defaultPosition.lng);
       }
     }
-  }, []);
+  }, [trigger]);
 
   const searchNearbyPlaces = (lat, lng, kakaoMap) => {
     const radius = 5000; // 5km 반경
@@ -100,12 +110,19 @@ const Map = () => {
         });
 
         kakao.maps.event.addListener(kakaoMarker, "click", () => {
-          const result = window.confirm(
-            `${place.place_name}로 이동하시겠습니까?`
-          );
-          if (result) {
-            navigate(`/${place.id}/${place.place_name}`);
-          }
+          // confirm 알림창
+          Swal.fire({
+            title: `${place.place_name}`,
+            text: `${place.place_name} 리뷰를 확인하러 가시겠습니까?`,
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonText: "예",
+            cancelButtonText: "아니오",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              navigate(`/${place.id}/${place.place_name}`);
+            }
+          });
         });
 
         newMarkers.push(kakaoMarker);
@@ -123,10 +140,10 @@ const Map = () => {
   };
 
   const cities = ["서울", "인천", "대전", "대구", "광주", "부산"];
-  const handleCityClick = (e) => {
+  const handleCityClick = (city) => {
     setSelectedPage(1);
+    setSelected(city);
     removeMarkers(); // 기존 마커 제거
-    const city = e.target.value;
     ps.keywordSearch(`${city} 클라이밍`, (data, status, pagination) =>
       placeSearchCB(data, status, map, pagination)
     );
@@ -148,10 +165,19 @@ const Map = () => {
       image: markerImage,
     });
     kakao.maps.event.addListener(kakaoMarker, "click", () => {
-      const result = window.confirm(`${place.place_name}로 이동하시겠습니까?`);
-      if (result) {
-        navigate(`/${place.id}/${place.place_name}`);
-      }
+      // const result = window.confirm(`${place.place_name}로 이동하시겠습니까?`);
+      Swal.fire({
+        title: `${place.place_name}`,
+        text: `${place.place_name} 리뷰를 확인하러 가시겠습니까?`,
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "예",
+        cancelButtonText: "아니오",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate(`/${place.id}/${place.place_name}`);
+        }
+      });
     });
 
     // 지도 중심 이동 및 확대 레벨 조정
@@ -171,8 +197,9 @@ const Map = () => {
         <div className={"flex gap-x-6 w-full"}>
           {cities.map((city) => (
             <button
-              className={`w-[76px] h-8 bg-[#FFB200] text-white rounded-3xl transition-colors duration-300 hover:text-[#333] hover:bg-[#FFD54F] ${selected === city ? "bg-[#FFD54F]" : "bg-[#FFB200] text-[#333]"
-                }`}
+              className={`w-[76px] h-8 bg-[#FFB200] text-white rounded-3xl transition-colors duration-300 hover:bg-[#FF8D03] ${
+                selected === city ? "bg-[#FF8D03]" : "bg-[#FFB200] "
+              }`}
               key={city}
               value={city}
               onClick={() => handleCityClick(city)}
@@ -184,15 +211,22 @@ const Map = () => {
       </div>
       <div className="flex justify-center inline-block pt-[30px] h-[600px] mb-[50px]">
         <div className="z-10 bg-white overflow-y-auto h-full w-[320px] border-r border-[#ddd]">
-          <h3 className="text-xl px-1 border-b border-[#eee] pb-[25px]">
+          <h3 className="flex justify-between text-xl px-1 border-b border-[#eee] pb-[25px]">
             검색 결과
+            <button
+              className="text-sm font-normal w-[110px] h-8 bg-[#FFB200] text-white rounded-3xl transition-colors duration-300 hover:bg-[#FF8D03]"
+              onClick={() => setTrigger((prev) => !prev)}
+            >
+              현재 위치로 이동
+            </button>
           </h3>
           <ul>
             {mapList.map((place, index) => (
               <li
                 key={index}
-                className={`mb-0 border-b border-[#eee] px-2 py-2 flex flex-col mb-2 cursor-pointer transition-colors duration-300 ${selected === place ? "bg-blue-100" : "hover:bg-blue-100"
-                  }`}
+                className={`mb-0 border-b border-[#eee] px-2 py-2 flex flex-col cursor-pointer transition-colors duration-300 ${
+                  selected === place ? "bg-blue-100" : "hover:bg-blue-100"
+                }`}
                 onClick={() => choosePlace(place)}
               >
                 <div className="w-full">
