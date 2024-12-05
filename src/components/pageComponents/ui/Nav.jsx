@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { supabase } from "../../../api/supabaseClient";
 import { FaHome, FaYoutube } from "react-icons/fa";
-import { IoBookmarks } from "react-icons/io5";
+import { IoHeartCircle } from "react-icons/io5";
 import { FiLogIn, FiLogOut } from "react-icons/fi";
 import MyPage from "../for-mypage/MyPage";
 import useUser from "../../../hooks/useUser";
@@ -26,8 +26,8 @@ const Nav = () => {
       <div className="relative w-[360px] h-[60px] bg-[rgba(137,137,137,0.4)] backdrop-blur-[2px] rounded-[30px] flex items-center justify-around px-5">
         <div className="flex items-center gap-6">
           <FaHome className="text-white text-[35px] cursor-pointer" onClick={() => nav("/")} />
-          <IoBookmarks className="text-white text-[28px] cursor-pointer" />
-          <FaYoutube className="text-white text-[35px] cursor-pointer" onClick={() => nav("youtube")} />
+          <IoHeartCircle className="text-white text-[38px] cursor-pointer" onClick={() => nav("/likes")} />
+          <FaYoutube className="text-white text-[35px] cursor-pointer" onClick={() => nav("/youtube")} />
           <FiLogOut
             className="text-white text-[35px] cursor-pointer"
             onClick={logout}

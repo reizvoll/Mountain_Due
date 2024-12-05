@@ -1,8 +1,10 @@
 import { useState } from "react";
 import TosModal from "./TosModal";
+import { useNavigate } from "react-router-dom";
 
 const Footer = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const nav = useNavigate();
 
   const openModalHandler = () => {
     setIsModalOpen(true);
@@ -15,9 +17,9 @@ const Footer = () => {
   return (
     <div className="relative w-full h-[250px] bg-[#D9D9D9] mx-auto flex flex-col justify-center items-center">
 
-      <div className="absolute top-[27.2%] left-[10%] flex flex-col space-y-4 text-[#484848] text-[18px] leading-[21px]">
+      <div className="absolute top-[27.2%] left-[10%] flex flex-col space-y-4 text-[#484848] text-[18px] leading-[21px] cursor-pointer">
         <div onClick={() => nav("/")}>Home</div>
-        <div onClick={() => nav("/")}>Bookmark</div>
+        <div onClick={() => nav("/likes")}>Likes</div>
         <div onClick={() => nav("/youtube")}>Youtube</div>
       </div>
 
