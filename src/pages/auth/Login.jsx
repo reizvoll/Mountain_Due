@@ -1,12 +1,11 @@
-import React from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { IoIosArrowDropleft } from "react-icons/io";
 import { ToastContainer } from "react-toastify";
 import useToastAlert from "../../hooks/useToastAlert";
-import { loginUser } from "../../api/login";
+import { loginUser, loginWithGoogle } from "../../api/login";
 import "react-toastify/dist/ReactToastify.css";
-
 import { useDispatch } from "react-redux"; // Redux dispatch 사용
 import { setUser } from "../../redux/slices/userSlice"; // Redux 액션 추가
 
@@ -30,7 +29,21 @@ const Login = () => {
 
   const navigate = useNavigate();
   const showToast = useToastAlert();
+  const location = useLocation();
   const dispatch = useDispatch(); // Redux dispatch 가져오기
+
+  useEffect(() => {
+    // URL에서 `signup` 쿼리 파라미터 확인
+    const params = new URLSearchParams(location.search);
+    const signupStatus = params.get("signup");
+
+    if (signupStatus === "success") {
+      showToast(
+        "회원가입이 완료되었습니다! 구글 간편 로그인을 사용하여 로그인해주세요.",
+        "success"
+      );
+    }
+  }, [location.search, showToast]);
 
   const onSubmit = async (data) => {
     const { emailPrefix, emailDomain, password } = data;
@@ -61,6 +74,42 @@ const Login = () => {
       showToast("로그인에 성공했습니다!", "success", () => navigate("/"));
     } catch (error) {
       showToast("알 수 없는 오류가 발생했습니다. 다시 시도해주세요.", "error");
+    }
+  };
+
+  // const handleGoogleLogin = async () => {
+  //   try {
+  //     const { user, error } = await loginWithGoogle();
+  //     if (error) {
+  //       showToast(error, "error");
+  //       return;
+  //     }
+
+  //     dispatch(
+  //       setUser({
+  //         id: user.id,
+  //         nickname: user.nickname,
+  //         img_url: user.img_url,
+  //       })
+  //     );
+  //   } catch (err) {
+  //     console.error("Google 로그인 처리 중 오류:", err.message);
+  //     showToast("Google 로그인 중 오류가 발생했습니다.", "error");
+  //   }
+  // };
+
+  const handleGoogleLogin = async () => {
+    try {
+      const { error, message } = await loginWithGoogle();
+      if (error) {
+        showToast(error, "error");
+        return;
+      }
+
+      showToast(message, "info");
+    } catch (err) {
+      console.error("Google 로그인 처리 중 오류:", err.message);
+      showToast("Google 로그인 중 오류가 발생했습니다.", "error");
     }
   };
 
@@ -111,22 +160,31 @@ const Login = () => {
           >
             로그인
           </button>
-          <p className="text-sm text-gray-600 mt-4 text-center">
-            계정이 없으신가요?{" "}
+
+          {/* 간편 로그인 섹션 */}
+          <div className="mt-8 flex flex-col items-center w-full">
+            <p className="text-sm text-gray-600">또는</p>
             <button
-              onClick={() => navigate("/signup")}
+              type="button"
+              onClick={handleGoogleLogin}
+              className="w-full flex items-center justify-center mt-4 py-3 bg-white border border-gray-300 rounded-full font-medium text-gray-600 hover:bg-gray-100 transition shadow-md"
+            >
+              <img
+                src="img/google.png"
+                alt="Google Logo"
+                className="w-5 h-5 mr-3"
+              />
+              Google로 로그인
+            </button>
+          </div>
+
+          <p className="text-sm text-gray-600 mt-5 text-center">
+            계정이 없으신가요?{"  "}
+            <Link
+              to="/signup"
               className="text-blue-500 font-medium text-sm hover:underline"
             >
               회원가입
-            </button>
-          </p>
-          <p className="text-sm text-gray-600 mt-2 text-center">
-            비밀번호를 잊으셨나요?{" "}
-            <Link
-              to="/recover"
-              className="text-blue-500 font-medium text-sm hover:underline"
-            >
-              비밀번호 재설정
             </Link>
           </p>
         </form>
