@@ -70,6 +70,9 @@ const Login = () => {
           img_url: user.img_url,
         })
       );
+
+    // 로그인 시, 바로 직전 페이지로 이동하도록 구현
+      showToast("로그인에 성공했습니다!", "success", () => navigate("/"));
       
     } catch (error) {
       showToast("알 수 없는 오류가 발생했습니다. 다시 시도해주세요.", "error");
