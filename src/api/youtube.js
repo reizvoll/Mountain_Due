@@ -1,55 +1,55 @@
-import axios from "axios";
+import axios from 'axios'
 
-const API_KEY = import.meta.env.VITE_YOUTUBE_API_KEY;
+const API_KEY = import.meta.env.VITE_YOUTUBE_API_KEY
 
 const youtubeAPI = axios.create({
-  baseURL: "https://youtube.googleapis.com/youtube/v3",
+  baseURL: 'https://youtube.googleapis.com/youtube/v3',
   timeout: 5000,
   headers: {
-    Accept: "application/json",
+    Accept: 'application/json',
   },
-});
+})
 
 const paramsClimbing = {
-  part: "snippet",
+  part: 'snippet',
   maxResults: 6,
-  playlistId: "PLQw_lIekogqOZpOzmzpMzfDjksS9FQxPv",
+  playlistId: 'PLQw_lIekogqOZpOzmzpMzfDjksS9FQxPv',
   key: API_KEY,
-};
+}
 
 const paramsBeginner = {
-  part: "snippet",
+  part: 'snippet',
   maxResults: 6,
-  playlistId: "PLQw_lIekogqPuD9j-r-XSWnHUwJGzjMhH",
+  playlistId: 'PLQw_lIekogqPuD9j-r-XSWnHUwJGzjMhH',
   key: API_KEY,
-};
+}
 
-export const getClimbResults = async (pageToken = "") => {
+export const getClimbResults = async (pageToken = '') => {
   try {
-    const response = await youtubeAPI.get("/playlistItems", {
+    const response = await youtubeAPI.get('/playlistItems', {
       params: {
         ...paramsClimbing,
         pageToken,
       },
-    });
-    return response.data;
+    })
+    return response.data
   } catch (error) {
-    console.error("Error fetching climb results:", error);
-    throw error;
+    console.error('Error fetching climb results:', error)
+    throw error
   }
-};
+}
 
-export const getBeginnerResults = async (pageToken = "") => {
+export const getBeginnerResults = async (pageToken = '') => {
   try {
-    const response = await youtubeAPI.get("/playlistItems", {
+    const response = await youtubeAPI.get('/playlistItems', {
       params: {
         ...paramsBeginner,
         pageToken,
       },
-    });
-    return response.data;
+    })
+    return response.data
   } catch (error) {
-    console.error("Error fetching climb results:", error);
-    throw error;
+    console.error('Error fetching climb results:', error)
+    throw error
   }
-};
+}

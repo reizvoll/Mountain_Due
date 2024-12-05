@@ -5,7 +5,7 @@ const ContainerYoutubeSection = ({ children }) => {
         {children}
       </div>
     </>
-  );
-};
+  )
+}
 
-export default ContainerYoutubeSection;
+export default ContainerYoutubeSection
