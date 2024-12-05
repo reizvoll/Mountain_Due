@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, Link } from "react-router-dom";
-import { IoIosArrowDropleft } from "react-icons/io";
+import { FaHome } from "react-icons/fa";
 import { ToastContainer } from "react-toastify";
 import useToastAlert from "../../hooks/useToastAlert";
 import {
@@ -115,7 +115,7 @@ const SignUp = () => {
   return (
     <Background>
       <div className="bg-white relative p-8 rounded-2xl shadow-lg w-1/4 max-w-sm min-w-96">
-        <IoIosArrowDropleft
+        <FaHome
           className="absolute left-4 top-4 text-3xl cursor-pointer"
           onClick={handleGoBack}
         />
