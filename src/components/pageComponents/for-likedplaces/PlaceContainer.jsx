@@ -3,7 +3,6 @@ import useUser from "../../../hooks/useUser";
 import { fetchLikedPlaceIdsAPI } from "../../../api/like";
 import { fetchPlaceAPI } from "../../../api/place";
 
-
 const PlaceContainer = () => {
   const [likedPlaces, setLikedPlaces] = useState([]); // 좋아요한 장소 데이터를 저장하는 상태
   const [loading, setLoading] = useState(true); // 로딩 상태
@@ -14,7 +13,7 @@ const PlaceContainer = () => {
       try {
         // 1. 좋아요한 장소 ID 가져오기
         const likedPlaceIds = await fetchLikedPlaceIdsAPI(user.id);
-        console.log("Liked Place IDs:", likedPlaceIds); // 디버깅: 좋아요한 장소 ID 확인
+        // console.log("Liked Place IDs:", likedPlaceIds); // 디버깅: 좋아요한 장소 ID 확인
 
         // 2. 각 장소의 상세 정보 가져오기
         const placesData = await Promise.all(
@@ -30,7 +29,7 @@ const PlaceContainer = () => {
         );
 
         // 3. null 값을 제거하고 상태 업데이트
-        setLikedPlaces(placesData.filter(Boolean)); // 유효한 데이터만 저장
+        setLikedPlaces(placesData.flat()); // 유효한 데이터만 저장
       } catch (error) {
         console.error("Error fetching liked places:", error); // API 호출 실패 시 에러 로그
       } finally {
@@ -61,20 +60,22 @@ const PlaceContainer = () => {
     );
   }
 
+  console.log(likedPlaces)
+
   // 좋아요한 장소 목록을 표시하는 컴포넌트
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">좋아요 한 장소</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {likedPlaces.map((place) => (
+        {likedPlaces?.map((place) => (
           <div
             key={place.id}
             className="bg-white shadow-md rounded-lg overflow-hidden"
           >
             <div className="p-4">
-              <h2 className="text-xl font-bold">{place.place_name}</h2>
-              <p className="text-gray-500">{place.road_address_name}</p>
-              <p className="text-gray-500">{place.phone || "전화번호 없음"}</p>
+              <h2 className="text-[#333] text-xl font-bold">{place.place_name}</h2>
+              <p className="text-[#666">{place.road_address_name}</p>
+              <p className="text-[#666]">{place.phone || "전화번호 없음"}</p>
             </div>
             <div className="h-40 bg-gray-200">
               {/* Replace with actual image URL if available */}
