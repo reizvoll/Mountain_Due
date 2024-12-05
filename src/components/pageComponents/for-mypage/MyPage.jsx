@@ -1,24 +1,24 @@
-import React, { useState } from "react";
-import ReactDOM from "react-dom";
-import { IoClose } from "react-icons/io5";
-import { useDispatch } from "react-redux";
-import { setUser } from "../../../redux/slices/userSlice";
+import React, { useState } from 'react'
+import ReactDOM from 'react-dom'
+import { IoClose } from 'react-icons/io5'
+import { useDispatch } from 'react-redux'
+import { setUser } from '../../../redux/slices/userSlice'
 import {
   updateUserProfileImage,
   updateUserNickname,
-} from "../../../api/myPageData";
-import useUser from "../../../hooks/useUser";
-import ProfileImageUploader from "../for-auth/ProfileImageUploader";
-import { uploadProfileImage } from "../../../api/signup";
-import { useForm } from "react-hook-form";
-import NicknameInput from "../for-auth/NicknameInput";
-import Swal from "sweetalert2";
+} from '../../../api/myPageData'
+import useUser from '../../../hooks/useUser'
+import ProfileImageUploader from '../for-auth/ProfileImageUploader'
+import { uploadProfileImage } from '../../../api/signup'
+import { useForm } from 'react-hook-form'
+import NicknameInput from '../for-auth/NicknameInput'
+import Swal from 'sweetalert2'
 
 const MyPage = ({ isOpen, onClose }) => {
-  const { user } = useUser();
-  const dispatch = useDispatch(); // Redux dispatch 가져오기
-  const [newImage, setNewImage] = useState(null);
-  const [nicknameUpdated, setNicknameUpdated] = useState(false); // 닉네임 변경 상태 추가
+  const { user } = useUser()
+  const dispatch = useDispatch() // Redux dispatch 가져오기
+  const [newImage, setNewImage] = useState(null)
+  const [nicknameUpdated, setNicknameUpdated] = useState(false) // 닉네임 변경 상태 추가
 
   const {
     register,
@@ -30,55 +30,55 @@ const MyPage = ({ isOpen, onClose }) => {
     trigger,
     formState: { errors, isValid },
   } = useForm({
-    mode: "onChange", // 입력값이 변경될 때마다 유효성 검사
+    mode: 'onChange', // 입력값이 변경될 때마다 유효성 검사
     defaultValues: {
       nicknameAvailable: false, // 닉네임 중복 확인 상태 초기화
     },
-  });
+  })
 
-  if (!isOpen) return null;
+  if (!isOpen) return null
 
   // 프로필 이미지 업데이트
   const handleProfileImageUpdate = async () => {
-    if (!newImage) return;
+    if (!newImage) return
     try {
-      const imageUrl = await uploadProfileImage(newImage); // Supabase에 이미지 업로드
-      await updateUserProfileImage(user.id, imageUrl); // Supabase DB 업데이트
-      dispatch(setUser({ ...user, img_url: imageUrl })); // Redux 상태 업데이트
+      const imageUrl = await uploadProfileImage(newImage) // Supabase에 이미지 업로드
+      await updateUserProfileImage(user.id, imageUrl) // Supabase DB 업데이트
+      dispatch(setUser({ ...user, img_url: imageUrl })) // Redux 상태 업데이트
       Swal.fire({
         html: '<div style="display:flex;flex-direction: column;"><p style="display:flex; justify-content:center"><img src="/img/check.png" alt="custom-icon" style="width: 50px; height: 50px;" /></p><p style="margin-top:10px;">프로필 이미지가 업데이트 되었습니다.</p></div>',
-        confirmButtonText: "확인",
-      });
+        confirmButtonText: '확인',
+      })
     } catch (error) {
-      console.error(error);
+      console.error(error)
       Swal.fire({
         html: '<div style="display:flex;flex-direction: column;"><p style="display:flex; justify-content:center"><img src="/img/error.png" alt="custom-icon" style="width: 50px; height: 50px;" /></p><p style="margin-top:10px;">프로필 이미지 업데이트 중 오류가 발생했습니다.</p></div>',
-        confirmButtonText: "예",
-        cancelButtonText: "아니오",
-      });
+        confirmButtonText: '예',
+        cancelButtonText: '아니오',
+      })
     }
-  };
+  }
 
   // 닉네임 업데이트
   const handleNicknameUpdate = async (data) => {
-    const { nickname } = data;
-    console.log(data);
+    const { nickname } = data
+    console.log(data)
     try {
-      await updateUserNickname(user.id, nickname); // Supabase DB 업데이트
-      dispatch(setUser({ ...user, nickname })); // Redux 상태 업데이트
+      await updateUserNickname(user.id, nickname) // Supabase DB 업데이트
+      dispatch(setUser({ ...user, nickname })) // Redux 상태 업데이트
       Swal.fire({
         html: '<div style="display:flex;flex-direction: column;"><p style="display:flex; justify-content:center"><img src="/img/check.png" alt="custom-icon" style="width: 50px; height: 50px;" /></p><p style="margin-top:10px;">닉네임이 성공적으로 업데이트되었습니다.</p></div>',
-        confirmButtonText: "확인",
-      });
+        confirmButtonText: '확인',
+      })
     } catch (error) {
-      console.error(error);
+      console.error(error)
       Swal.fire({
         html: '<div style="display:flex;flex-direction: column;"><p style="display:flex; justify-content:center"><img src="/img/error.png" alt="custom-icon" style="width: 50px; height: 50px;" /></p><p style="margin-top:10px;">닉네임 업데이트 중 오류가 발생했습니다.</p></div>',
-        confirmButtonText: "예",
-        cancelButtonText: "아니오",
-      });
+        confirmButtonText: '예',
+        cancelButtonText: '아니오',
+      })
     }
-  };
+  }
 
   return ReactDOM.createPortal(
     <div
@@ -98,13 +98,11 @@ const MyPage = ({ isOpen, onClose }) => {
         </button>
 
         {/* 헤더 */}
-        <h2 className="text-[28px] text-[#333] text-center ">
-          My Page
-        </h2>
+        <h2 className="text-[28px] text-[#333] text-center ">My Page</h2>
 
         <div className="mt-8">
-        {/* 프로필 이미지 업로드 */}
-        <ProfileImageUploader setImage={setNewImage} />
+          {/* 프로필 이미지 업로드 */}
+          <ProfileImageUploader setImage={setNewImage} />
         </div>
 
         {/* 닉네임 입력 */}
@@ -130,25 +128,26 @@ const MyPage = ({ isOpen, onClose }) => {
           <button
             onClick={async () => {
               if (newImage) {
-                await handleProfileImageUpdate(); // 이미지 변경 처리
+                await handleProfileImageUpdate() // 이미지 변경 처리
               }
               if (isValid) {
-                await handleNicknameUpdate(watch()); // 닉네임 변경 처리
+                await handleNicknameUpdate(watch()) // 닉네임 변경 처리
               }
             }}
             disabled={!newImage && !isValid} // 이미지와 닉네임 모두 변경되지 않은 경우 비활성화
-            className={`w-40 py-3 rounded-full font-semibold text-white ${newImage || isValid
-                ? "bg-[#FFB200] hover:bg-[#FF8D03]" // 활성화 상태
-                : "bg-gray-300 cursor-not-allowed opacity-60 grayscale" // 비활성화 상태
-              }`}
+            className={`w-40 py-3 rounded-full font-semibold text-white ${
+              newImage || isValid
+                ? 'bg-[#FFB200] hover:bg-[#FF8D03]' // 활성화 상태
+                : 'bg-gray-300 cursor-not-allowed opacity-60 grayscale' // 비활성화 상태
+            }`}
           >
             업데이트
           </button>
         </div>
       </div>
     </div>,
-    document.getElementById("portal-root")
-  );
-};
+    document.getElementById('portal-root')
+  )
+}
 
-export default MyPage;
+export default MyPage

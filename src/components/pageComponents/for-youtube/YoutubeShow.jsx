@@ -1,22 +1,22 @@
-import YoutubeBeginner from "./YoutubeBeginner";
-import YoutubeClimbing from "./YoutubeClimbing";
-import useFetchClimbResults from "../../../hooks/useFetchClimbResults";
-import useFetchBeginnerResults from "../../../hooks/useFetchBeginnerResults";
-import useModalHandler from "../../../hooks/useModalHandler";
+import YoutubeBeginner from './YoutubeBeginner'
+import YoutubeClimbing from './YoutubeClimbing'
+import useFetchClimbResults from '../../../hooks/useFetchClimbResults'
+import useFetchBeginnerResults from '../../../hooks/useFetchBeginnerResults'
+import useModalHandler from '../../../hooks/useModalHandler'
 
 const YoutubeShow = () => {
   const { climbResult, fetchNextClimb, hasNextPage, isFetchingNextPage } =
-    useFetchClimbResults();
+    useFetchClimbResults()
 
   const {
     beginnerHasNextPage,
     beginnerResult,
     beginnerisFetchingNextPage,
     fetchNextBeginner,
-  } = useFetchBeginnerResults();
+  } = useFetchBeginnerResults()
 
   const { isClicked, youtubeId, modalClickHandler, modalClose } =
-    useModalHandler();
+    useModalHandler()
 
   return (
     <>
@@ -54,7 +54,7 @@ const YoutubeShow = () => {
         </div>
       )}
     </>
-  );
-};
+  )
+}
 
-export default YoutubeShow;
+export default YoutubeShow

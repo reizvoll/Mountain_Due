@@ -1,27 +1,26 @@
-import React, { useState, useEffect } from "react";
-import useUser from "../../../hooks/useUser";
+import React, { useState, useEffect } from 'react'
+import useUser from '../../../hooks/useUser'
 
 const ProfileImageUploader = ({ setImage }) => {
-  const { user } = useUser(); // Access the user's current profile info
-  const [profilePreview, setProfilePreview] = useState(null);
+  const { user } = useUser() // Access the user's current profile info
+  const [profilePreview, setProfilePreview] = useState(null)
 
   useEffect(() => {
     // Set the initial preview to the user's current profile image
     if (user?.img_url) {
-      setProfilePreview(user.img_url);
+      setProfilePreview(user.img_url)
     }
-  }, [user]);
+  }, [user])
 
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setImage(file); // Update the parent state with the selected file
-    if (file) setProfilePreview(URL.createObjectURL(file)); // Update the preview to the new image
-  };
-
+    const file = e.target.files[0]
+    setImage(file) // Update the parent state with the selected file
+    if (file) setProfilePreview(URL.createObjectURL(file)) // Update the preview to the new image
+  }
 
   return (
     // UI : mb수정
-    <div className="flex items-center justify-center mb-3 flex-col"> 
+    <div className="flex items-center justify-center mb-3 flex-col">
       <label htmlFor="profileImage" className="cursor-pointer">
         <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden border-2 border-black">
           {profilePreview ? (
@@ -53,7 +52,7 @@ const ProfileImageUploader = ({ setImage }) => {
         onChange={handleImageChange}
       />
     </div>
-  );
-};
+  )
+}
 
-export default ProfileImageUploader;
+export default ProfileImageUploader

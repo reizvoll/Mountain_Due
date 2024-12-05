@@ -1,29 +1,29 @@
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import { useNavigate, Link } from "react-router-dom";
-import { FaHome } from "react-icons/fa";
-import { ToastContainer } from "react-toastify";
-import useToastAlert from "../../hooks/useToastAlert";
+import React, { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { useNavigate, Link } from 'react-router-dom'
+import { FaHome } from 'react-icons/fa'
+import { ToastContainer } from 'react-toastify'
+import useToastAlert from '../../hooks/useToastAlert'
 import {
   signUpUser,
   uploadProfileImage,
   saveUserInfo,
   signupGoogle,
-} from "../../api/signup";
-import "react-toastify/dist/ReactToastify.css";
+} from '../../api/signup'
+import 'react-toastify/dist/ReactToastify.css'
 
-import ProfileImageUploader from "../../components/pageComponents/for-auth/ProfileImageUploader";
-import EmailInput from "../../components/pageComponents/for-auth/EmailInput";
-import PasswordInput from "../../components/pageComponents/for-auth/PasswordInput";
-import NicknameInput from "../../components/pageComponents/for-auth/NicknameInput";
-import Background from "../../components/pageComponents/for-auth/Background";
-import TosModal from '../../components/pageComponents/ui/TosModal';
+import ProfileImageUploader from '../../components/pageComponents/for-auth/ProfileImageUploader'
+import EmailInput from '../../components/pageComponents/for-auth/EmailInput'
+import PasswordInput from '../../components/pageComponents/for-auth/PasswordInput'
+import NicknameInput from '../../components/pageComponents/for-auth/NicknameInput'
+import Background from '../../components/pageComponents/for-auth/Background'
+import TosModal from '../../components/pageComponents/ui/TosModal'
 
 const SignUp = () => {
-  const navigate = useNavigate();
-  const showToast = useToastAlert();
-  const [isModalOpen, setIsModalOpen] = useState(false); // 약관 모달 상태
-  const [termsAgreed, setTermsAgreed] = useState(false); // 약관 동의 여부
+  const navigate = useNavigate()
+  const showToast = useToastAlert()
+  const [isModalOpen, setIsModalOpen] = useState(false) // 약관 모달 상태
+  const [termsAgreed, setTermsAgreed] = useState(false) // 약관 동의 여부
 
   const {
     register,
@@ -35,56 +35,56 @@ const SignUp = () => {
     trigger,
     formState: { errors, isValid },
   } = useForm({
-    mode: "onChange", // 입력값이 변경될 때마다 유효성 검사
+    mode: 'onChange', // 입력값이 변경될 때마다 유효성 검사
     defaultValues: {
-      emailDomain: "custom", // emailDomain 초기값 설정
+      emailDomain: 'custom', // emailDomain 초기값 설정
       nicknameAvailable: false, // 닉네임 중복 확인 상태 초기화
     },
-  });
+  })
 
   // 우선 뒤로가기로 변경, 홈으로 바로 보내버리니 약간 UX적 부분에서 불편함 느낄수도..?
   // const handleGoHome = () => navigate("/");
-  const handleGoBack = () => navigate(-1);
+  const handleGoBack = () => navigate(-1)
 
   const onSubmit = async (data) => {
     if (!termsAgreed) {
-      showToast("약관에 동의하셔야 회원가입이 가능합니다.", "error");
-      return;
+      showToast('약관에 동의하셔야 회원가입이 가능합니다.', 'error')
+      return
     }
 
-    const { emailPrefix, emailDomain, password, nickname, image } = data;
+    const { emailPrefix, emailDomain, password, nickname, image } = data
 
     const fullEmail =
-      emailDomain === "custom" ? emailPrefix : `${emailPrefix}@${emailDomain}`;
+      emailDomain === 'custom' ? emailPrefix : `${emailPrefix}@${emailDomain}`
 
-    let imageUrl = "/img/default_profile.png";
+    let imageUrl = '/img/default_profile.png'
 
     // 프로필 이미지 업로드
     if (image) {
       const { data: uploadData, error: uploadError } = await uploadProfileImage(
         image
-      );
+      )
       if (uploadError) {
-        showToast(uploadError.message, "error");
-        return;
+        showToast(uploadError.message, 'error')
+        return
       }
-      imageUrl = uploadData?.path ?? imageUrl;
+      imageUrl = uploadData?.path ?? imageUrl
     }
 
     // 사용자 등록
     const { data: signUpData, error: signUpError } = await signUpUser({
       email: fullEmail,
       password,
-    });
+    })
 
     // 이메일 중복 확인
     if (signUpError) {
-      if (signUpError.message.includes("already registered")) {
-        showToast("이미 가입된 이메일입니다.", "error");
+      if (signUpError.message.includes('already registered')) {
+        showToast('이미 가입된 이메일입니다.', 'error')
       } else {
-        showToast(signUpError.message, "error");
+        showToast(signUpError.message, 'error')
       }
-      return;
+      return
     }
 
     // 사용자 정보 저장
@@ -92,24 +92,24 @@ const SignUp = () => {
       signUpData.user.id,
       nickname,
       imageUrl
-    );
+    )
 
     if (insertError) {
-      showToast(insertError.message, "error");
+      showToast(insertError.message, 'error')
     } else {
-      showToast("회원가입이 완료되었습니다!", "success");
+      showToast('회원가입이 완료되었습니다!', 'success')
     }
-  };
+  }
 
   const handleGoogleSignup = async () => {
     try {
-      await signupGoogle(); // Google OAuth 회원가입 시작
+      await signupGoogle() // Google OAuth 회원가입 시작
       // 리디렉션이 발생하므로 추가 로직은 필요하지 않습니다.
     } catch (err) {
-      console.error("Google 회원가입 처리 중 오류:", err.message);
-      showToast("Google 회원가입 중 오류가 발생했습니다.", "error");
+      console.error('Google 회원가입 처리 중 오류:', err.message)
+      showToast('Google 회원가입 중 오류가 발생했습니다.', 'error')
     }
-  };
+  }
 
   // 로그인 로직도 동일하게 sm으로 width값 통일화시켰숩니당. (너무 꽉 찬 느낌이라 여백의 미 를 줘봤습니다..)
   return (
@@ -131,7 +131,7 @@ const SignUp = () => {
           onSubmit={handleSubmit(onSubmit)}
           className="gap-4 flex flex-col justify-center items-center"
         >
-          <ProfileImageUploader setImage={(file) => setValue("image", file)} />
+          <ProfileImageUploader setImage={(file) => setValue('image', file)} />
           <EmailInput
             register={register}
             setValue={setValue}
@@ -199,7 +199,7 @@ const SignUp = () => {
             </button>
           </div>
           <p className="text-sm text-gray-600 mt-2 text-center">
-            이미 계정이 있으신가요?{" "}
+            이미 계정이 있으신가요?{' '}
             <Link
               to="/login"
               className="text-blue-500 font-medium text-sm hover:underline"
@@ -212,7 +212,7 @@ const SignUp = () => {
         <TosModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       </div>
     </Background>
-  );
-};
+  )
+}
 
-export default SignUp;
+export default SignUp

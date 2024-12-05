@@ -1,22 +1,22 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { persistReducer, persistStore } from "redux-persist";
-import storage from "redux-persist/lib/storage";
-import userReducer from "../slices/userSlice";
-import { combineReducers } from "redux";
+import { configureStore } from '@reduxjs/toolkit'
+import { persistReducer, persistStore } from 'redux-persist'
+import storage from 'redux-persist/lib/storage'
+import userReducer from '../slices/userSlice'
+import { combineReducers } from 'redux'
 
 // Redux Persist 설정
 const persistConfig = {
-  key: "root",
+  key: 'root',
   storage,
-  whitelist: ["user"], // user slice만 persist
-};
+  whitelist: ['user'], // user slice만 persist
+}
 
 // Root Reducer 설정
 const rootReducer = combineReducers({
   user: userReducer,
-});
+})
 
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 // Store 설정
 export const store = configureStore({
@@ -25,7 +25,7 @@ export const store = configureStore({
     getDefaultMiddleware({
       serializableCheck: false,
     }),
-});
+})
 
 // Persistor 설정
-export const persistor = persistStore(store);
+export const persistor = persistStore(store)

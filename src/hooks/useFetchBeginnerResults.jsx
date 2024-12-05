@@ -1,14 +1,14 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { getBeginnerResults } from "../api/youtube";
+import { useInfiniteQuery } from '@tanstack/react-query'
+import { getBeginnerResults } from '../api/youtube'
 
 const useFetchBeginnerResults = () => {
-  const fetchBeginnerResults = async ({ pageParam = "" }) => {
-    const data = await getBeginnerResults(pageParam);
+  const fetchBeginnerResults = async ({ pageParam = '' }) => {
+    const data = await getBeginnerResults(pageParam)
     return {
       items: data.items,
       nextPageToken: data.nextPageToken,
-    };
-  };
+    }
+  }
 
   const {
     data: beginnerResult,
@@ -16,7 +16,7 @@ const useFetchBeginnerResults = () => {
     hasNextPage: beginnerHasNextPage,
     isFetchingNextPage: beginnerisFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: ["beginnerResult"],
+    queryKey: ['beginnerResult'],
     queryFn: fetchBeginnerResults,
     getNextPageParam: (lastPage) => lastPage.nextPageToken || undefined,
     select: (data) => {
@@ -27,16 +27,16 @@ const useFetchBeginnerResults = () => {
           thumbnail: item.snippet.thumbnails.high.url,
         })),
         nextPageToken: page.nextPageToken,
-      }));
+      }))
     },
-  });
+  })
 
   return {
     beginnerResult,
     fetchNextBeginner,
     beginnerHasNextPage,
     beginnerisFetchingNextPage,
-  };
-};
+  }
+}
 
-export default useFetchBeginnerResults;
+export default useFetchBeginnerResults

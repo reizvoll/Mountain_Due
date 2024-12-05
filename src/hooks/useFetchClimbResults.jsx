@@ -1,14 +1,14 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { getClimbResults } from "../api/youtube";
+import { useInfiniteQuery } from '@tanstack/react-query'
+import { getClimbResults } from '../api/youtube'
 
 const useFetchClimbResults = () => {
-  const fetchClimbResults = async ({ pageParam = "" }) => {
-    const data = await getClimbResults(pageParam);
+  const fetchClimbResults = async ({ pageParam = '' }) => {
+    const data = await getClimbResults(pageParam)
     return {
       items: data.items,
       nextPageToken: data.nextPageToken,
-    };
-  };
+    }
+  }
 
   const {
     data: climbResult,
@@ -16,7 +16,7 @@ const useFetchClimbResults = () => {
     hasNextPage,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: ["climbResults"],
+    queryKey: ['climbResults'],
     queryFn: fetchClimbResults,
     getNextPageParam: (lastPage) => lastPage.nextPageToken || undefined,
     select: (data) => {
@@ -27,11 +27,11 @@ const useFetchClimbResults = () => {
           thumbnail: item.snippet.thumbnails.high.url,
         })),
         nextPageToken: page.nextPageToken,
-      }));
+      }))
     },
-  });
+  })
 
-  return { climbResult, fetchNextClimb, hasNextPage, isFetchingNextPage };
-};
+  return { climbResult, fetchNextClimb, hasNextPage, isFetchingNextPage }
+}
 
-export default useFetchClimbResults;
+export default useFetchClimbResults
