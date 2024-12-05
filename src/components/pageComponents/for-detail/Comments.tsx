@@ -8,6 +8,7 @@ import useUser from '../../../hooks/useUser';
 import { useComments } from '../../../hooks/useComments';
 import { useParams } from 'react-router-dom';
 import { FaCheck } from 'react-icons/fa';
+import Swal from "sweetalert2";
 
 const Comments = () => {
     const { id: spotId } = useParams();
@@ -55,9 +56,18 @@ const Comments = () => {
 
     /* 리뷰 삭제 */
     const handleDelete = (commentId) => {
-        if (window.confirm('리뷰를 삭제하시겠습니까?')) {
-            deleteMutation.mutate(commentId);
-        }
+            Swal.fire({
+            title: `리뷰 삭제`,
+            text: `리뷰를 삭제하시겠습니까?`,
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonText: "예",
+            cancelButtonText: "아니오",
+          }).then((result) => {
+            if (result.isConfirmed) {
+             deleteMutation.mutate(commentId);
+            }
+          });
     };
 
     return (
