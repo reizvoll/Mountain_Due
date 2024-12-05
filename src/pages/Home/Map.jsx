@@ -171,10 +171,11 @@ const Map = () => {
         <div className={"flex gap-x-6 w-full"}>
           {cities.map((city) => (
             <button
-              className="w-[76px] h-8 bg-[#FFB200] text-white rounded-3xl transition-colors duration-300 hover:text-[#333] hover:bg-[#FFD54F]"
+              className={`w-[76px] h-8 bg-[#FFB200] text-white rounded-3xl transition-colors duration-300 hover:text-[#333] hover:bg-[#FFD54F] ${selected === city ? "bg-[#FFD54F]" : "bg-[#FFB200] text-[#333]"
+                }`}
               key={city}
               value={city}
-              onClick={handleCityClick}
+              onClick={() => handleCityClick(city)}
             >
               {city}
             </button>
@@ -190,9 +191,8 @@ const Map = () => {
             {mapList.map((place, index) => (
               <li
                 key={index}
-                className={`mb-0 border-b border-[#eee] px-2 py-2 flex flex-col mb-2 cursor-pointer transition-colors duration-300 ${
-                  selected === place ? "bg-blue-100" : "hover:bg-blue-100"
-                }`}
+                className={`mb-0 border-b border-[#eee] px-2 py-2 flex flex-col mb-2 cursor-pointer transition-colors duration-300 ${selected === place ? "bg-blue-100" : "hover:bg-blue-100"
+                  }`}
                 onClick={() => choosePlace(place)}
               >
                 <div className="w-full">
