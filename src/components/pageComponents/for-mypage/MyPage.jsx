@@ -12,6 +12,7 @@ import ProfileImageUploader from "../for-auth/ProfileImageUploader";
 import { uploadProfileImage } from "../../../api/signup";
 import { useForm } from "react-hook-form";
 import NicknameInput from "../for-auth/NicknameInput";
+import Swal from "sweetalert2";
 
 const MyPage = ({ isOpen, onClose }) => {
   const { user } = useUser();
@@ -44,10 +45,17 @@ const MyPage = ({ isOpen, onClose }) => {
       const imageUrl = await uploadProfileImage(newImage); // Supabase에 이미지 업로드
       await updateUserProfileImage(user.id, imageUrl); // Supabase DB 업데이트
       dispatch(setUser({ ...user, img_url: imageUrl })); // Redux 상태 업데이트
-      alert("프로필 이미지가 성공적으로 업데이트되었습니다.");
+      Swal.fire({
+        html: '<div style="display:flex;flex-direction: column;"><p style="display:flex; justify-content:center"><img src="/img/check.png" alt="custom-icon" style="width: 50px; height: 50px;" /></p><p style="margin-top:10px;">프로필 이미지가 업데이트 되었습니다.</p></div>',
+        confirmButtonText: "확인",
+      });
     } catch (error) {
       console.error(error);
-      alert("프로필 이미지 업데이트 중 오류가 발생했습니다.");
+      Swal.fire({
+        html: '<div style="display:flex;flex-direction: column;"><p style="display:flex; justify-content:center"><img src="/img/error.png" alt="custom-icon" style="width: 50px; height: 50px;" /></p><p style="margin-top:10px;">프로필 이미지 업데이트 중 오류가 발생했습니다.</p></div>',
+        confirmButtonText: "예",
+        cancelButtonText: "아니오",
+      });
     }
   };
 
@@ -58,10 +66,17 @@ const MyPage = ({ isOpen, onClose }) => {
     try {
       await updateUserNickname(user.id, nickname); // Supabase DB 업데이트
       dispatch(setUser({ ...user, nickname })); // Redux 상태 업데이트
-      alert("닉네임이 성공적으로 업데이트되었습니다.");
+      Swal.fire({
+        html: '<div style="display:flex;flex-direction: column;"><p style="display:flex; justify-content:center"><img src="/img/check.png" alt="custom-icon" style="width: 50px; height: 50px;" /></p><p style="margin-top:10px;">닉네임이 성공적으로 업데이트되었습니다.</p></div>',
+        confirmButtonText: "확인",
+      });
     } catch (error) {
       console.error(error);
-      alert("닉네임 업데이트 중 오류가 발생했습니다.");
+      Swal.fire({
+        html: '<div style="display:flex;flex-direction: column;"><p style="display:flex; justify-content:center"><img src="/img/error.png" alt="custom-icon" style="width: 50px; height: 50px;" /></p><p style="margin-top:10px;">닉네임 업데이트 중 오류가 발생했습니다.</p></div>',
+        confirmButtonText: "예",
+        cancelButtonText: "아니오",
+      });
     }
   };
 
