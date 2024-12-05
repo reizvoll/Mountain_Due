@@ -58,7 +58,7 @@ export const signupGoogle = async () => {
           access_type: "offline",
           prompt: "consent",
         },
-        redirectTo: "http://localhost:5173/login?signup=success", // 상태 전달
+        redirectTo: "https://mountain-due.vercel.app/login?signup=success", // 상태 전달
       },
     });
 
