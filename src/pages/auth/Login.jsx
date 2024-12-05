@@ -71,7 +71,8 @@ const Login = () => {
         })
       );
 
-      showToast("로그인에 성공했습니다!", "success", () => navigate("/"));
+    // 로그인 시, 바로 직전 페이지로 이동하도록 구현
+      showToast("로그인에 성공했습니다!", "success", () => navigate(-1));
     } catch (error) {
       showToast("알 수 없는 오류가 발생했습니다. 다시 시도해주세요.", "error");
     }
@@ -117,25 +118,25 @@ const Login = () => {
 
   return (
     <Background>
-      <div className="bg-white p-10 rounded-2xl relative shadow-lg w-1/4 max-w-2xl min-w-96">
+      <div className="bg-white p-10 rounded-2xl relative shadow-lg w-1/4 max-w-sm min-w-96">
         <IoIosArrowDropleft
           className="absolute left-4 top-4 text-3xl cursor-pointer"
           onClick={handleGoHome}
         />
         <div className="flex items-center mb-6 flex-col gap-2">
-          <div className="w-72 mb-6">
-            <img src="img/mountain_due.png" alt="로고 이미지" />
-          </div>
-          <h1 className="text-center flex-grow text-2xl font-bold text-black">
+          <h1 className="text-center flex-grow text-2xl text-black">
             로그인
           </h1>
           <h2 className="text-center flex-grow text-sm text-gray-500 font-medium">
             이메일과 비밀번호를 입력해주세요.
           </h2>
+          <div className="w-40">
+            <img src="img/mountain_due.png" alt="로고 이미지" />
+          </div>
         </div>
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="gap-5 flex flex-col justify-center items-center"
+          className="gap-4 flex flex-col justify-center items-center"
         >
           {/* EmailInput 컴포넌트 */}
           <EmailInput
@@ -152,9 +153,9 @@ const Login = () => {
           <button
             type="submit"
             disabled={!isValid} // 유효하지 않은 경우 비활성화
-            className={`w-1/2 py-3 font-semibold rounded-full transition mt-8 ${
+            className={`w-2/3 py-3 font-semibold rounded-full transition ${
               isValid
-                ? "bg-[#FFB200] text-white hover:bg-yellow-600"
+                ? "bg-[#FFB200] text-white hover:bg-[#FF8D03]"
                 : "bg-gray-300 text-gray-500 cursor-not-allowed"
             }`}
           >

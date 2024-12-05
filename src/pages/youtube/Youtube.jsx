@@ -1,8 +1,8 @@
 import ContainerYoutubeSection from "../../components/pageComponents/for-youtube/ContainerYoutubeSection";
-import Hero from "../../components/pageComponents/for-youtube/Hero";
+import Hero from "../../components/pageComponents/for-youtube/HeroForYoutube";
 import YoutubeShow from "../../components/pageComponents/for-youtube/YoutubeShow";
+import Footer from '../../components/pageComponents/ui/Footer';
 
-// HeroSection에 이미지 변경해서 하라고 했던가.. 음..
 const Youtube = () => {
   return (
     <>
@@ -11,8 +11,10 @@ const Youtube = () => {
       <ContainerYoutubeSection>
       <YoutubeShow />
       </ContainerYoutubeSection>
+      <Footer />
       </div>
     </>
   );
 };
+
 export default Youtube;

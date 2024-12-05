@@ -49,4 +49,5 @@ const YoutubeClimbing = ({
     );
   }
 };
+
 export default YoutubeClimbing;

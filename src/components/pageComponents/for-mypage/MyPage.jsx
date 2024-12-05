@@ -17,6 +17,7 @@ const MyPage = ({ isOpen, onClose }) => {
   const { user } = useUser();
   const dispatch = useDispatch(); // Redux dispatch 가져오기
   const [newImage, setNewImage] = useState(null);
+  const [nicknameUpdated, setNicknameUpdated] = useState(false); // 닉네임 변경 상태 추가
 
   const {
     register,
@@ -70,39 +71,33 @@ const MyPage = ({ isOpen, onClose }) => {
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-[20px] w-full max-w-lg p-8 relative overflow-y-auto max-h-[90vh] shadow-xl"
+        className="bg-white rounded-[20px] w-full max-w-sm p-10 relative overflow-y-auto max-h-[90vh] shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* 닫기 버튼 */}
         <button
-          className="absolute top-4 right-4 text-[#666] hover:text-[#333] text-[28px]"
+          className="absolute top-4 right-4 text-[#666] hover:text-[#333] text-[32px]"
           onClick={onClose}
         >
           <IoClose />
         </button>
 
         {/* 헤더 */}
-        <h2 className="text-[28px] text-[#333] font-bold text-center mb-8">
+        <h2 className="text-[28px] text-[#333] text-center ">
           My Page
         </h2>
 
+        <div className="mt-8">
         {/* 프로필 이미지 업로드 */}
         <ProfileImageUploader setImage={setNewImage} />
-        <button
-          onClick={handleProfileImageUpdate}
-          disabled={!newImage}
-          className={`w-full py-3 rounded-full font-semibold text-white mt-4 ${
-            newImage
-              ? "bg-blue-500 hover:bg-blue-600"
-              : "bg-gray-300 cursor-not-allowed"
-          }`}
-        >
-          프로필 이미지 업데이트
-        </button>
+        </div>
 
         {/* 닉네임 입력 */}
-        <div className="mt-8">
-          <form onSubmit={handleSubmit(handleNicknameUpdate)}>
+        <div className="mt-10">
+          <form
+            onSubmit={handleSubmit(handleNicknameUpdate)}
+            className="flex flex-wrap items-center gap-4" // 수평 및 수직 정렬 지원
+          >
             <NicknameInput
               register={register}
               setError={setError}
@@ -112,13 +107,28 @@ const MyPage = ({ isOpen, onClose }) => {
               setValue={setValue}
               trigger={trigger}
             />
-            <button
-              className="w-full py-3 mt-4 bg-blue-500 text-white rounded-full font-semibold hover:bg-blue-600 disabled:opacity-60 disabled:cursor-not-allowed disabled:grayscale"
-              disabled={!isValid}
-            >
-              닉네임 업데이트
-            </button>
           </form>
+        </div>
+
+        {/* 통합 업데이트 버튼 */}
+        <div className="flex justify-center items-center mt-8 gap-4">
+          <button
+            onClick={async () => {
+              if (newImage) {
+                await handleProfileImageUpdate(); // 이미지 변경 처리
+              }
+              if (isValid) {
+                await handleNicknameUpdate(watch()); // 닉네임 변경 처리
+              }
+            }}
+            disabled={!newImage && !isValid} // 이미지와 닉네임 모두 변경되지 않은 경우 비활성화
+            className={`w-40 py-3 rounded-full font-semibold text-white ${newImage || isValid
+                ? "bg-[#FFB200] hover:bg-[#FF8D03]" // 활성화 상태
+                : "bg-gray-300 cursor-not-allowed opacity-60 grayscale" // 비활성화 상태
+              }`}
+          >
+            업데이트
+          </button>
         </div>
       </div>
     </div>,

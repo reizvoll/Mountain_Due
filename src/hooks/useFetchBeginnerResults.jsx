@@ -38,4 +38,5 @@ const useFetchBeginnerResults = () => {
     beginnerisFetchingNextPage,
   };
 };
+
 export default useFetchBeginnerResults;
