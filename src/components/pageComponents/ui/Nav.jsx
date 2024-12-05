@@ -69,7 +69,7 @@ const Nav = () => {
             cancelButtonText: "아니오",
           }).then((result) => {
             if (result.isConfirmed) {
-              navigate(`/login`); // Redirects to the login page
+              nav(`/login`); // Redirects to the login page
             }
           });
         }}
