@@ -25,7 +25,7 @@ const HeroSection = () => {
 
       {/* Nav & 로고 */}
       <div className="absolute top-[18px] left-0 w-full flex items-center justify-between px-[50px]">
-        <div className="w-[115px] h-[115px] bg-cover" style={{ backgroundImage: "url('/img/mountain_due.png')" }} onClick={() => nav("/")}></div>
+        <div className="cursor-pointer w-[115px] h-[115px] bg-cover" style={{ backgroundImage: "url('/img/mountain_due.png')" }} onClick={() => nav("/")}></div>
         <Nav />
       </div>
 
