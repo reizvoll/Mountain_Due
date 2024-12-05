@@ -36,32 +36,21 @@ const EmailInput = ({ register, setValue, errors, watch }) => {
         </select>
       </div>
       {/* 이메일 유효성 검사 메시지 */}
-      {emailDomain === "custom" ? (
-        // emailDomain이 "custom"일 때 전체 이메일 형식 검증
-        emailPrefix &&
-        !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(emailPrefix) ? (
-          <p className="text-red-500 text-sm mt-1">
-            유효한 이메일 형식이 아닙니다.
-          </p>
-        ) : (
-          errors.emailPrefix && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.emailPrefix.message}
-            </p>
-          )
-        )
-      ) : // emailDomain이 "custom"이 아닐 때 prefix 검증
-      emailPrefix && !/^[A-Z0-9._%+-]+$/i.test(emailPrefix) ? (
-        <p className="text-red-500 text-sm mt-1">
-          유효한 이메일 형식이 아닙니다.
-        </p>
-      ) : (
-        errors.emailPrefix && (
-          <p className="text-red-500 text-sm mt-1">
-            {errors.emailPrefix.message}
-          </p>
-        )
-      )}
+      {emailPrefix && emailPrefix.length > 0
+        ? emailDomain === "custom"
+          ? // emailDomain이 "custom"일 때 전체 이메일 형식 검증
+            !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(emailPrefix) && (
+              <p className="text-red-500 text-sm mt-1">
+                유효한 이메일 형식이 아닙니다.
+              </p>
+            )
+          : // emailDomain이 "custom"이 아닐 때 prefix 검증
+            !/^[A-Z0-9._%+-]+$/i.test(emailPrefix) && (
+              <p className="text-red-500 text-sm mt-1">
+                유효한 이메일 형식이 아닙니다.
+              </p>
+            )
+        : null}
     </div>
   );
 };
