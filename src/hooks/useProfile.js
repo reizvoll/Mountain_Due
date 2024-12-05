@@ -1,68 +1,68 @@
-import { useState } from "react";
-import { supabase } from "../api/supabaseClient";
+import { useState } from 'react'
+import { supabase } from '../api/supabaseClient'
 
 const useProfile = () => {
   const [profile, setProfile] = useState({
-    nickname: "",
-    img_url: "",
-  });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+    nickname: '',
+    img_url: '',
+  })
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
 
   // 프로필 데이터 가져오기
   const fetchProfile = async (userId) => {
     try {
-      setLoading(true);
+      setLoading(true)
       const { data, error } = await supabase
-        .from("users")
-        .select("nickname, img_url")
-        .eq("id", userId)
-        .single();
+        .from('users')
+        .select('nickname, img_url')
+        .eq('id', userId)
+        .single()
 
-      if (error) throw error;
-      setProfile(data);
+      if (error) throw error
+      setProfile(data)
     } catch (err) {
-      setError(err.message);
+      setError(err.message)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   // 닉네임 업데이트
   const updateNickname = async (userId, newNickname) => {
     try {
-      setLoading(true);
+      setLoading(true)
       const { error } = await supabase
-        .from("users")
+        .from('users')
         .update({ nickname: newNickname })
-        .eq("id", userId);
+        .eq('id', userId)
 
-      if (error) throw error;
-      setProfile((prev) => ({ ...prev, nickname: newNickname }));
+      if (error) throw error
+      setProfile((prev) => ({ ...prev, nickname: newNickname }))
     } catch (err) {
-      setError(err.message);
+      setError(err.message)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   // 이미지 업데이트
   const updateImage = async (userId, imageUrl) => {
     try {
-      setLoading(true);
+      setLoading(true)
       const { error } = await supabase
-        .from("users")
+        .from('users')
         .update({ img_url: imageUrl })
-        .eq("id", userId);
+        .eq('id', userId)
 
-      if (error) throw error;
-      setProfile((prev) => ({ ...prev, img_url: imageUrl }));
+      if (error) throw error
+      setProfile((prev) => ({ ...prev, img_url: imageUrl }))
     } catch (err) {
-      setError(err.message);
+      setError(err.message)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   return {
     profile,
@@ -71,7 +71,7 @@ const useProfile = () => {
     fetchProfile,
     updateNickname,
     updateImage,
-  };
-};
+  }
+}
 
-export default useProfile;
+export default useProfile

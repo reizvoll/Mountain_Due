@@ -1,7 +1,7 @@
-import Router from "./shared/Router";
-import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
-import { store, persistor } from "./redux/config/configStore";
+import Router from './shared/Router'
+import { Provider } from 'react-redux'
+import { PersistGate } from 'redux-persist/integration/react'
+import { store, persistor } from './redux/config/configStore'
 
 function App() {
   return (
@@ -12,7 +12,7 @@ function App() {
         <Router />
       </PersistGate>
     </Provider>
-  );
-};
+  )
+}
 
-export default App;
+export default App

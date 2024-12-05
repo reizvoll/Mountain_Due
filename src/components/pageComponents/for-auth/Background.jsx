@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 
 const Background = ({ children }) => {
   return (
@@ -12,7 +12,7 @@ const Background = ({ children }) => {
 
       {children}
     </div>
-  );
-};
+  )
+}
 
-export default Background;
+export default Background
