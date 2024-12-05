@@ -1,17 +1,13 @@
 import { supabase } from "./supabaseClient";
 import { v4 as uuidv4 } from "uuid";
 
-/**
- * 사용자 등록
- */
+  // 사용자 등록
 export const signUpUser = async ({ email, password }) => {
   const { data, error } = await supabase.auth.signUp({ email, password });
   return { data, error };
 };
 
-/**
- * 사용자 프로필 이미지 업로드
- */
+  // 사용자 프로필 이미지 업로드
 export const uploadProfileImage = async (image) => {
   const fileName = `${uuidv4()}`; // UUID를 사용한 고유 파일명 생성
   const folderPath = "users"; // 폴더 경로 설정
@@ -25,7 +21,6 @@ export const uploadProfileImage = async (image) => {
     throw new Error(`이미지 업로드 실패: ${uploadError.message}`);
   }
 
-  // 아오 에러 뭔데... get publicurl error...
   // 업로드된 이미지의 공개 URL 가져오기
   const {
     data: { publicUrl },
@@ -41,9 +36,7 @@ export const uploadProfileImage = async (image) => {
   return publicUrl; // URL 반환
 };
 
-/**
- * 사용자 정보 저장
- */
+  // 사용자 저장
 export const saveUserInfo = async (userId, nickname, img_url) => {
   const { error } = await supabase.from("users").insert([
     {
@@ -54,7 +47,6 @@ export const saveUserInfo = async (userId, nickname, img_url) => {
   ]);
   return error;
 };
-
 
 export const signupGoogle = async () => {
   try {

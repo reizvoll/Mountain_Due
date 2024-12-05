@@ -18,4 +18,5 @@ const useModalHandler = () => {
   };
   return { isClicked, youtubeId, modalClickHandler, modalClose };
 };
+
 export default useModalHandler;

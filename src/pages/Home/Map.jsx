@@ -246,7 +246,7 @@ const Map = () => {
           ></Pagination>
         </div>
 
-        <div ref={mapRef} className="w-[870px] h-full overflow-hidden"></div>
+        <div ref={mapRef} className="w-[870px] h-full overflow-hidden" ></div>
       </div>
     </>
   );

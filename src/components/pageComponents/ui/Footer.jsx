@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import TosModal from './TosModal';
+import { useState } from "react";
+import TosModal from "./TosModal";
 
 const Footer = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -13,30 +13,32 @@ const Footer = () => {
   };
 
   return (
-    <div className="relative w-full h-[250px] bg-[#D9D9D9] mx-auto">
-      <div className="absolute left-[9.17%] top-[27.2%] flex flex-col space-y-4 text-[#484848] text-[18px] leading-[21px]">
-        <div>Home</div>
-        <div>Bookmark</div>
-        <div>Youtube</div>
-      </div>
+    <div className="relative w-full h-[250px] bg-[#D9D9D9] mx-auto flex flex-col justify-center items-center">
 
-      <div className="absolute left-[71.33%] top-[20%] flex ">
-        <img
-          src="/img/card.png" // public 폴더에 저장된 이미지 경로
-          alt="Card_Img"
-          className="w-[80px] h-[80px] object-contain"
-        />
+      <div className="absolute top-[27.2%] left-[10%] flex flex-col space-y-4 text-[#484848] text-[18px] leading-[21px]">
+        <div onClick={() => nav("/")}>Home</div>
+        <div onClick={() => nav("/")}>Bookmark</div>
+        <div onClick={() => nav("/youtube")}>Youtube</div>
       </div>
 
       <div
-        className="absolute left-[33.33%] top-[58%] text-[#484848] text-[18px] leading-[21px] cursor-pointer"
+        className="absolute top-[58%] left-[33.33%] text-[#484848] text-[18px] leading-[21px] cursor-pointer"
         onClick={openModalHandler}
       >
         이용 약관
       </div>
-      <div className="absolute left-[71.33%] top-[58%] text-right text-[#484848] text-[18px] leading-[21px]">
-        ⓒ copyright by Yu-Gi-0h!
+
+      <div className="absolute top-[48%] left-[75%] flex items-center space-x-">
+        <span className="text-[#484848] text-[18px] leading-[21px]">
+          ⓒ copyright by Yu-Gi-0h!
+        </span>
+        <img
+          src="/img/card.png"
+          alt="Card_Img"
+          className="w-[60px] h-[60px] relative -top-[10px]"
+        />
       </div>
+
       <TosModal isOpen={isModalOpen} onClose={closeModalHandler} />
     </div>
   );

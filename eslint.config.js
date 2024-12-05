@@ -34,7 +34,6 @@ export default [
         { allowConstantExport: true },
       ],
       "props-type": off
-      // "react/prop-types": "off",
       // "no-unused-vars": "off", 일단 혹시몰라 주석처리해놨습니둥
     },
   },

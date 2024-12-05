@@ -33,4 +33,5 @@ const useFetchClimbResults = () => {
 
   return { climbResult, fetchNextClimb, hasNextPage, isFetchingNextPage };
 };
+
 export default useFetchClimbResults;
