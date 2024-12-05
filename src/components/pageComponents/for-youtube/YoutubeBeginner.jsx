@@ -1,4 +1,4 @@
-import Btn from "../ui/Btn";
+import Btn from '../ui/Btn'
 
 const YoutubeBeginner = ({
   beginnerResult,
@@ -24,21 +24,21 @@ const YoutubeBeginner = ({
                       src={item.thumbnail}
                       className="w-[300px] h-[165px] object-cover rounded-md hover:scale-105 cursor-pointer"
                       onClick={() => {
-                        modalClickHandler(item);
+                        modalClickHandler(item)
                       }}
                     ></img>
                     <p className="mt-3 text-[18px]">
-                      {item.title.substring(0, 17).trim() + "..."}
+                      {item.title.substring(0, 17).trim() + '...'}
                     </p>
                   </div>
-                );
-              });
+                )
+              })
             })}
           </div>
           {beginnerHasNextPage && (
             <Btn
               onClick={() => {
-                fetchNextBeginner();
+                fetchNextBeginner()
               }}
             >
               더 보기
@@ -46,8 +46,8 @@ const YoutubeBeginner = ({
           )}
         </div>
       </>
-    );
+    )
   }
-};
+}
 
-export default YoutubeBeginner;
+export default YoutubeBeginner

@@ -1,7 +1,7 @@
 import React from 'react'
-import PlaceContainer from '../../components/pageComponents/for-likedplaces/PlaceContainer';
-import Hero from '../../components/pageComponents/ui/Hero';
-import Footer from '../../components/pageComponents/ui/Footer';
+import PlaceContainer from '../../components/pageComponents/for-likedplaces/PlaceContainer'
+import Hero from '../../components/pageComponents/ui/Hero'
+import Footer from '../../components/pageComponents/ui/Footer'
 
 const LikedPlaces = () => {
   return (
@@ -10,7 +10,7 @@ const LikedPlaces = () => {
       <PlaceContainer />
       <Footer />
     </div>
-  );
-};
+  )
+}
 
-export default LikedPlaces;
+export default LikedPlaces

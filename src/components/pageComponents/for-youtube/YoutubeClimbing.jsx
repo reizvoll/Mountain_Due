@@ -1,4 +1,4 @@
-import Btn from "../ui/Btn";
+import Btn from '../ui/Btn'
 
 const YoutubeClimbing = ({
   climbResult,
@@ -24,21 +24,21 @@ const YoutubeClimbing = ({
                       className="w-[300px] h-[165px] object-cover rounded-md hover:scale-105 cursor-pointer"
                       src={item.thumbnail}
                       onClick={() => {
-                        modalClickHandler(item);
+                        modalClickHandler(item)
                       }}
                     ></img>
                     <p className="mt-3 text-[18px]">
-                      {item.title.substring(0, 17).trim() + "..."}
+                      {item.title.substring(0, 17).trim() + '...'}
                     </p>
                   </div>
-                );
-              });
+                )
+              })
             })}
           </div>
           {hasNextPage && (
             <Btn
               onClick={() => {
-                fetchNextClimb();
+                fetchNextClimb()
               }}
             >
               더 보기
@@ -46,8 +46,8 @@ const YoutubeClimbing = ({
           )}
         </div>
       </>
-    );
+    )
   }
-};
+}
 
-export default YoutubeClimbing;
+export default YoutubeClimbing
