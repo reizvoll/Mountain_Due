@@ -39,7 +39,7 @@ export const loginWithGoogle = async () => {
           prompt: "consent",
         },
         // redirectTo: "http://localhost:5173?login=success", // 로그인 후 리디렉션 경로
-        redirectTo: `http://localhost:5173/login/google/callback`,
+        redirectTo: `https://mountain-due.vercel.app/login/google/callback`,
       },
     });
 
