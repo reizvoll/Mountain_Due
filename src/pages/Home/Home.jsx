@@ -1,3 +1,4 @@
+import PlaceSlider from '../../components/pageComponents/for-likedplaces/PlaceSlider'
 import Footer from '../../components/pageComponents/ui/Footer'
 import HeroSection from '../../components/pageComponents/ui/HeroSection'
 import useUser from '../../hooks/useUser'
@@ -12,6 +13,7 @@ const Home = () => {
     <div>
       <HeroSection />
       <Map />
+      <PlaceSlider />
       <Footer />
     </div>
   )
