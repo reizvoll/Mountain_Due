@@ -22,7 +22,21 @@
 
 - 👑 팀장이라 적고 거의 잡일담당 꼬붕.. 이자 <br> 7세 남아 박민준 담당일진, 625(전쟁 아니고 Yu-Gi-OH! 입니다.) 의 헴 **임지영**
 
-- 🗺️ 지도 총괄 담당 건달  **김호준 (화이트 민준)** (사유는 아래의 이미지를 참고해주세요. 하고 여기다가 넣어주3)
+<style>
+  details {
+    margin-left: 32px; /* 들여쓰기 효과 */
+    margin-bottom: 10px;
+  }
+</style>
+
+- 🗺️ 지도 총괄 담당 건달  **김호준 (화이트 민준)**
+
+<details>
+  <summary>건달이 된 이유</summary>
+  <div markdown="1">
+    <img width="300" alt="회원가입 페이지" src ="https://github.com/user-attachments/assets/8e579dba-3b4a-4cb9-9383-cf3b0677bb06" >
+  </div>
+</details>
 
 - 🗺️ 지도 상세페이지 담당 윌리웡카  **박가나**
 
