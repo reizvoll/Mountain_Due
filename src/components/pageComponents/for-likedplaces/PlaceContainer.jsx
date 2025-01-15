@@ -2,20 +2,17 @@ import React, { useEffect, useState } from 'react'
 import useUser from '../../../hooks/useUser'
 import { fetchLikedPlaceIdsAPI } from '../../../api/like'
 import { fetchPlaceAPI } from '../../../api/place'
-import { useNavigate } from 'react-router-dom'
 
 const PlaceContainer = () => {
   const [likedPlaces, setLikedPlaces] = useState([]) // 좋아요한 장소 데이터를 저장하는 상태
   const [loading, setLoading] = useState(true) // 로딩 상태
   const { user } = useUser() // 현재 사용자 정보
-  const nav = useNavigate();
 
   useEffect(() => {
     const fetchLikedPlaces = async () => {
       try {
         // 1. 좋아요한 장소 ID 가져오기
         const likedPlaceIds = await fetchLikedPlaceIdsAPI(user.id)
-        // console.log("Liked Place IDs:", likedPlaceIds); // 디버깅: 좋아요한 장소 ID 확인
 
         // 2. 각 장소의 상세 정보 가져오기
         const placesData = await Promise.all(

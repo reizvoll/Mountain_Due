@@ -72,7 +72,7 @@
 
 ### 📝 프로필 수정
 
-- 미정
+- 
 
 <details>
 <summary>미리보기</summary>
